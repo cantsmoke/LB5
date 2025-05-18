@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package mortalkombatbversion;
+package com.mycompany.lb5;
 
 /**
  *
  * @author Мария
  */
-public class MortalKombatBVersion {
+public class LB5{
 
     /**
      * @param args the command line arguments

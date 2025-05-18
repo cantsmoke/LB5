@@ -2,20 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package mortalkombatbversion;
-
-
+package com.mycompany.lb5;
 
 /**
  *
  * @author Мария
  */
-public class LiuKangFabric implements EnemyFabricInterface {
-
+public class LiuKang extends Player{
+    
+    public LiuKang(int level, int health, int  damage, int attack){
+        super (level, health, damage, attack);
+    }
+    
     @Override
-    public Player create(int i) {
-        Player enemy;
-        enemy = new LiuKang(1, 70, 20, 1);
-        return enemy;
+    public String getName(){
+        return "Liu Kang";
     }
 }
