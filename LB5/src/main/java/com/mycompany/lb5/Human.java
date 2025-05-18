@@ -57,6 +57,4 @@ public class Human extends Player{
     public String getName(){
         return "You";
     }
-
-    
 }

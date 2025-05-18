@@ -26,22 +26,17 @@ public class Game {
 
     CharacterAction action = new CharacterAction();
     ChangeTexts change = new ChangeTexts();
-    Fight fight = new Fight();
+    public Fight fight = new Fight();
     private ArrayList<Result> results = new ArrayList<>();
 
-    public Player NewEnemy(JLabel L1, JLabel L2,
-            JLabel L3, JLabel L4, JProgressBar pr2) {
-        action.setEnemyes();
-        Player enemy = action.ChooseEnemy(L1, L2, L3, L4);
-        action.HP(enemy, pr2);
-        pr2.setMaximum(enemy.getMaxHealth());
+    public Player NewEnemy() {
+        action.setEnemies();
+        Player enemy = action.ChooseEnemy();
         return enemy;
     }
     
-    public Human NewHuman(JProgressBar pr1){
+    public Human NewHuman(){
         Human human = new Human (0,80,16,1);
-        action.HP(human, pr1);
-        pr1.setMaximum(human.getMaxHealth());
         return human;
     }
 

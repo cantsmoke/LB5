@@ -4,18 +4,14 @@
  */
 package com.mycompany.lb5;
 
-
 /**
  *
- * @author Мария
+ * @author Arseniy
  */
-public class SonyaBladeFabric implements EnemyFabricInterface {
-
-    @Override
-    public Player create(int i) {
-        Player enemy;
-        enemy = new SonyaBlade(1, 80, 16, 1);
-        return enemy;
-    }
-
+public enum EnemyType {
+    TANK,
+    MAGICIAN,
+    FIGHTER,
+    SOLDIER,
+    BOSS
 }

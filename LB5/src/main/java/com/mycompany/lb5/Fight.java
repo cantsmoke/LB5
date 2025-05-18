@@ -5,7 +5,10 @@
 package com.mycompany.lb5;
 
 //ADD IMAGE!!!
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,104 +17,123 @@ import javax.swing.JRadioButton;
 
 /**
  *
- * @author Мария
+* @author Мария
  */
 public class Fight {
 
     ChangeTexts change = new ChangeTexts();
     int kind_attack[] = {0};
     int experiences[] = {40, 90, 180, 260, 410};
-    EnemyFabric fabric = new EnemyFabric();
-    int i = 1;
+    EnemyFactory fabric = new EnemyFactory();
+    Boolean isPlayersTurn = TRUE;
     int k = -1;
     int stun = 0;
     double v = 0.0;
+    int i;
 
-    public void Move(Player p1, Player p2, JLabel l, JLabel l2) {
-        if (stun == 1) {
-            p1.setAttack(-1);
+    public void Move(Player human, Player enemy, JLabel labelHuman, JLabel labelEnemy) {
+        if (!isPlayersTurn) return; // Прерывание, если сейчас не ход игрока
+
+        if (enemy.isStunned()) {
+            // Враг пропускает ход
+            enemy.setStunned(false);
+            labelEnemy.setText(enemy.getName() + " оглушён и пропустил ход.");
+            isPlayersTurn = true; // Переход хода к игроку
+            return;
         }
-        switch (Integer.toString(p1.getAttack()) + Integer.toString(p2.getAttack())) {
-            case "10":
-                v = Math.random();
-                if (p1 instanceof ShaoKahn & v < 0.15) {
-                    p2.setHealth(-(int) (p1.getDamage() * 0.5));
-                    l2.setText("Your block is broken");
 
+        AttackType enemyAction = CharacterAction.ChooseEnemyBehavior(human, enemy);
+        AttackType playerAction = getLastPlayerAction(human); // метод, сохраняющий последнее действие игрока
+
+        switch (playerAction) {
+            case ATTACK:
+                if (enemyAction == AttackType.DEFEND) {
+                    // Контрудар
+                    human.setHealth(human.getHealth() - (int)(enemy.getDamage() * 0.5));
+                    labelEnemy.setText(enemy.getName() + " контратаковал.");
                 } else {
-                    p1.setHealth(-(int) (p2.getDamage() * 0.5));
-                    l2.setText(p2.getName() + " counterattacked");
+                    // Обычная атака
+                    enemy.setHealth(enemy.getHealth() - human.getDamage());
+                    labelEnemy.setText("Вы нанесли урон " + enemy.getName());
                 }
                 break;
-            case "11":
-                p2.setHealth(-p1.getDamage());
-                l2.setText(p1.getName() + " attacked");
-                break;
-            case "00":
-                v = Math.random();
-                if (v <= 0.5) {
-                    stun = 1;
+
+            case DEFEND:
+                if (enemyAction == AttackType.ATTACK) {
+                    // Враг атакует, но ты защищаешься — урона нет
+                    labelEnemy.setText("Вы блокировали атаку " + enemy.getName());
+                } else {
+                    // Оба защищаются — возможен стан
+                    if (Math.random() < 0.5) {
+                        enemy.setStunned(true);
+                        labelEnemy.setText(enemy.getName() + " оглушён из-за двойной защиты!");
+                    } else {
+                        labelEnemy.setText("Оба оборонялись. Ничего не произошло.");
+                    }
                 }
-                l2.setText("Both defended themselves");
-                break;
-            case "01":
-                l2.setText(p1.getName() + " didn't attacked");
-                break;
-            case "-10":
-                l.setText(p1.getName() + " was stunned");
-                stun = 0;
-                l2.setText(p2.getName() + " didn't attacked");
-                break;
-            case "-11":
-                p1.setHealth(-p2.getDamage());
-                l.setText(p1.getName() + " was stunned");
-                stun = 0;
-                l2.setText(p2.getName() + " attacked");
                 break;
         }
+
+        // Обновление текста состояния игрока
+        labelHuman.setText(human.getName() + ": " + human.getHealth() + "/" + human.getMaxHealth());
+        isPlayersTurn = true; // Теперь снова ход игрока
+    }
+    
+    private AttackType getLastPlayerAction(Player human) {
+        List<AttackType> history = human.getPlayerActionsHistory();
+        if (history.isEmpty()) return AttackType.DEFEND; // По умолчанию
+        return history.get(history.size() - 1);
     }
 
-    public void Hit(Player human, Player enemy, int a, JLabel label,
-            JLabel label2, JDialog dialog, JLabel label3, CharacterAction action,
-            JProgressBar pr1, JProgressBar pr2, JDialog dialog1,
-            JDialog dialog2, JFrame frame, ArrayList<Result> results,
-            JLabel label4, JLabel label5, JLabel label6, JLabel label7,
-            JLabel label8, Items[] items, JRadioButton rb) {
-        label7.setText("");
-        human.setAttack(a);
 
-        if (k < kind_attack.length - 1) {
-            k++;
-        } else {
-            kind_attack = action.ChooseBehavior(enemy, action);
-            k = 0;
+    public void performPlayerAction(Player human, Player enemy, AttackType action) {
+         switch (action) {
+            case ATTACK:
+                processPlayersAttack(human, enemy);
+                break;
+            case DEFEND:
+                processPlayersDefend(human, enemy);
+                break;
+            default:
+                throw new IllegalArgumentException("Такого типа соперника нет: " + action);
         }
-        enemy.setAttack(kind_attack[k]);
-        if (i % 2 == 1) {
-            Move(human, enemy, label7, label8);
-        } else {
-            Move(enemy, human, label7, label8);
+    }
+    
+    private void processPlayersAttack(Player human, Player enemy) {
+        AttackType humanBehaviour = AttackType.ATTACK;
+        AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
+        enemy.setHealth(enemy.getHealth() - human.attackEnemy());
+        switch (enemyBehaviour) {
+            case DEFEND:
+                // Контрудар — 50% урона врага
+                human.setHealth(human.getHealth() - (int) (enemy.getDamage() * 0.5));
+                enemy.defendFromEnemy();
+                break;
+
+            case ATTACK:
+                // Обычная атака — урон от игрока
+                enemy.setHealth(enemy.getHealth() - human.attackEnemy());
+                break;
         }
-        i++;
-        change.RoundTexts(human, enemy, label, label2, i, label6);
-        action.HP(human, pr1);
-        action.HP(enemy, pr2);
-        if (human.getHealth() <= 0 & items[2].getCount() > 0) {
-            human.setNewHealth((int) (human.getMaxHealth() * 0.05));
-            items[2].setCount(-1);
-            action.HP(human, pr1);
-            label2.setText(human.getHealth() + "/" + human.getMaxHealth());
-            rb.setText(items[2].getName() + ", " + items[2].getCount() + " шт");
-            label7.setText("Вы воскресли");
+        isPlayersTurn = FALSE;
+    }
+
+    private void processPlayersDefend(Player human, Player enemy) {
+        AttackType humanBehaviour = AttackType.DEFEND;
+        AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
+        switch (enemyBehaviour) {
+            case ATTACK:
+                // Игрок защищается — ничего не происходит
+                break;
+
+            case DEFEND:
+                // Оба защищаются — шанс оглушения врага
+                if (Math.random() < 0.5) {
+                    enemy.setStunned(true); // добавь поле и обработку stun-статуса
+                }
+                break;
         }
-        if (human.getHealth() <= 0 | enemy.getHealth() <= 0) {
-            if (((Human) human).getWin() == 11) {
-                EndFinalRound(((Human) human), action, results, dialog1, dialog2,
-                        frame, label4, label5);
-            } else {
-                EndRound(human, enemy, dialog, label3, action, items);
-            }
-        }
+        isPlayersTurn = FALSE;
     }
 
     public void EndRound(Player human, Player enemy, JDialog dialog, JLabel label,
@@ -134,7 +156,7 @@ public class Fight {
             label.setText(enemy.getName() + " win");
         }
 
-        i = 1;
+        isPlayersTurn = TRUE;
         k = -1;
         kind_attack = ResetAttack();
 
@@ -187,7 +209,7 @@ public class Fight {
         if (((Human) human).getWin() == 6 | ((Human) human).getWin() == 11) {
             enemy1 = action.ChooseBoss(label, label2, text, label3, human.getLevel());
         } else {
-            enemy1 = action.ChooseEnemy(label, label2, text, label3);
+            enemy1 = action.ChooseEnemy(/*label, label2, text, label3*/);
         }
         pr1.setMaximum(human.getMaxHealth());
         pr2.setMaximum(enemy1.getMaxHealth());
@@ -197,5 +219,7 @@ public class Fight {
         action.HP(enemy1, pr2);
         return enemy1;
     }
+
+    
 
 }

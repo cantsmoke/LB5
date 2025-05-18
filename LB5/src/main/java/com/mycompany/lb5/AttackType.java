@@ -4,18 +4,11 @@
  */
 package com.mycompany.lb5;
 
-
-
 /**
  *
- * @author Мария
+ * @author Arseniy
  */
-public class LiuKangFabric implements EnemyFabricInterface {
-
-    @Override
-    public Player create(int i) {
-        Player enemy;
-        enemy = new LiuKang(1, 70, 20, 1);
-        return enemy;
-    }
+public enum AttackType {
+    ATTACK,
+    DEFEND
 }
