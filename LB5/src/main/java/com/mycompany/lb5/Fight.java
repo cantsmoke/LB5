@@ -87,6 +87,7 @@ public class Fight {
 
 
     public void performPlayerAction(Player human, Player enemy, AttackType action) {
+        System.out.println(isPlayersTurn);
          switch (action) {
             case ATTACK:
                 processPlayersAttack(human, enemy);
@@ -102,7 +103,8 @@ public class Fight {
     private void processPlayersAttack(Player human, Player enemy) {
         AttackType humanBehaviour = AttackType.ATTACK;
         AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
-        enemy.setHealth(enemy.getHealth() - human.attackEnemy());
+        //enemy.setHealth(enemy.getHealth() - human.attackEnemy());
+        System.out.println(enemyBehaviour);
         switch (enemyBehaviour) {
             case DEFEND:
                 // Контрудар — 50% урона врага
@@ -121,6 +123,7 @@ public class Fight {
     private void processPlayersDefend(Player human, Player enemy) {
         AttackType humanBehaviour = AttackType.DEFEND;
         AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
+        System.out.println(enemyBehaviour);
         switch (enemyBehaviour) {
             case ATTACK:
                 // Игрок защищается — ничего не происходит

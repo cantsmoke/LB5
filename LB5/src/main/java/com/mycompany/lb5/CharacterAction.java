@@ -104,24 +104,24 @@ public class CharacterAction {
         int total = attackCount + defendCount;
 
         // Если данных ещё недостаточно, выбираем на основе базовых вероятностей
-        if (total == 0) {
+        if (total < 15) {
             return Math.random() < attackProbability / 100.0 ? AttackType.ATTACK : AttackType.DEFEND;
+        } else{
+            // Вычисляем склонность игрока
+            double playerAggression = (double) attackCount / total;
+            double playerDefense = (double) defendCount / total;
+
+            // Адаптируем вероятности врага
+            // Если игрок атакует часто, враг чаще будет защищаться и наоборот
+            int adjustedAttackProb = (int) (attackProbability * playerDefense + defendProbability * playerDefense * 0.5);
+            int adjustedDefendProb = (int) (defendProbability * playerAggression + attackProbability * playerAggression * 0.5);
+
+            // Нормализация до 100%
+            int totalAdjusted = adjustedAttackProb + adjustedDefendProb;
+            double normAttack = (double) adjustedAttackProb / totalAdjusted;
+
+            return Math.random() < normAttack ? AttackType.ATTACK : AttackType.DEFEND;
         }
-
-        // Вычисляем склонность игрока
-        double playerAggression = (double) attackCount / total;
-        double playerDefense = (double) defendCount / total;
-
-        // Адаптируем вероятности врага
-        // Если игрок атакует часто, враг чаще будет защищаться и наоборот
-        int adjustedAttackProb = (int) (attackProbability * playerDefense + defendProbability * playerDefense * 0.5);
-        int adjustedDefendProb = (int) (defendProbability * playerAggression + attackProbability * playerAggression * 0.5);
-
-        // Нормализация до 100%
-        int totalAdjusted = adjustedAttackProb + adjustedDefendProb;
-        double normAttack = (double) adjustedAttackProb / totalAdjusted;
-
-        return Math.random() < normAttack ? AttackType.ATTACK : AttackType.DEFEND;
     }
 
     public static AttackType ChooseEnemyBehavior(Player human, Player enemy) {

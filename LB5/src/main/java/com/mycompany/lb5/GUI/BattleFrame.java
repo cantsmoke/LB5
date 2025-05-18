@@ -63,7 +63,6 @@ public class BattleFrame extends JFrame {
         buttonPanel.add(btnDefend);
         buttonPanel.add(btnItems);
 
-        // ��������� ������ � ����
         add(healthPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -88,13 +87,14 @@ public class BattleFrame extends JFrame {
         game.fight.performPlayerAction(human, enemy, AttackType.ATTACK);
         updateHealthLabels();
         checkWinCondition();
-        
+        checkLoseCondition();
     }
 
     public void onDefendClicked(ActionEvent e) {
         System.out.println("Кнопка 'Защититься' нажата.");
         game.fight.performPlayerAction(human, enemy, AttackType.DEFEND);
         updateHealthLabels();
+        checkWinCondition();
         checkLoseCondition();
     }
 
@@ -115,6 +115,7 @@ public class BattleFrame extends JFrame {
     private void checkLoseCondition() {
         if (human.getHealth() <= 0) {
             JOptionPane.showMessageDialog(this, "Вы проиграли!");
+            //логика начала боя заново
             dispose(); // Закрыть окно боя
         }
     }
