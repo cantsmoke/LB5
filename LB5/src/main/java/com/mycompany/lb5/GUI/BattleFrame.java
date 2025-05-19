@@ -98,14 +98,14 @@ public class BattleFrame extends JFrame {
         updateHealthLabels();
         checkWinCondition();
         checkLoseCondition();
-        if (checkIfPlayerStunned()){
+        /*if (checkIfPlayerStunned()){
             System.out.println("Player skips turn");
             game.fight.performPlayerAction(human, enemy, AttackType.ATTACK);//впоследствии метод в методе надо будет 
                                                                             //разбить, т.к. он выполняет много логики
                                                                             //тут будет обрабатываться метод, 
                                                                             //который соответствует состоянию оглушения игрока, который будет находиться в это классе
                                                                             //но метод обработки оглушений будет в Fight
-        }
+        }*/ // этого не должно быть, из за условия в классе Fight
         System.out.println("-------------------");
     }
 

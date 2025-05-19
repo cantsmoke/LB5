@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
     }
 
     public void onStartNewGameClicked(ActionEvent e) {
-        System.out.println("Button 'Start new game' pressed.");
+        System.out.println("New game started!");
         // Пока просто выводим сообщение
         human = game.NewHuman();
         enemy = game.NewEnemy();

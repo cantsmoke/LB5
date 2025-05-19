@@ -40,7 +40,7 @@ public class Fight {
 
 
     public void performPlayerAction(Player human, Player enemy, AttackType action) {
-        System.out.println("player's turn: " + isPlayersTurn);
+        System.out.println("player is first to perform action: " + isPlayersTurn);
         switch (action) {
             case ATTACK -> processPlayersAttack(human, enemy);
             case DEFEND -> processPlayersDefend(human, enemy);
@@ -52,22 +52,27 @@ public class Fight {
     //Если игрок в стане - то тогда враг либо просто наносит ему урон, либо враг не делает ничего в случае защиты
     //Если враг в стане - то тогда игрок либо наносит ему урон, либо ничего ему не делает при варианте защиты
     //в этих двух методах надо вынести первые два if'а в отдельный метод, делающий проверку на оглушение
+    //Это надо учесть -	Оглушение пользователя известно только в результате следующего хода, т.е. игрок так же выбирает защиту или атаку, но действие не проходит.
     
     private void processPlayersAttack(Player human, Player enemy) {
         if (isPlayersTurn && human.isStunned()) { //если ход игрока и игрок в стане - то враг либо атакует либо защищается
-            System.out.println(human.getName() + " is skipping turn!");
-            AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
+                                                  //Наверно лучше сделать так, чтобы он атаковал всегда
+            System.out.println("player is skipping turn!");
+            AttackType enemyBehaviour = AttackType.ATTACK;
+            System.out.println("enemy chose: " + enemyBehaviour);
+            human.setHealth(human.getHealth() - enemy.attackEnemy());
+            /*AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
             System.out.println("enemy chose: " + enemyBehaviour);
             switch (enemyBehaviour) {
                 case DEFEND -> enemy.defendFromEnemy();
                 case ATTACK -> human.setHealth(human.getHealth() - enemy.attackEnemy());
-            }
+            }*/
             human.setStunned(false);
             isPlayersTurn = FALSE;
             return;
         } else if (!isPlayersTurn && enemy.isStunned()) { //если ход врага и он пропускате ход из за стана - то игрок 
                                                             //только атакует его тк метод обрабатывает именно атаку игрока
-            System.out.println(enemy.getName() + " is skipping turn!");
+            System.out.println("enemy is skipping turn!");
             AttackType humanBehaviour = AttackType.ATTACK;//оно задается но не используется в методе
             enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy() * 0.5));
             enemy.setStunned(false);
@@ -113,19 +118,24 @@ public class Fight {
 
     private void processPlayersDefend(Player human, Player enemy) {
         if (isPlayersTurn && human.isStunned()) { //если ход игрока и игрок в стане - то враг либо атакует либо защищается
-            System.out.println(human.getName() + " is skipping turn!");
+                                                  //Наверно лучше сделать так, чтобы он атаковал всегда
+            System.out.println("player is skipping turn!");
+            AttackType enemyBehaviour = AttackType.ATTACK;
+            System.out.println("enemy chose: " + enemyBehaviour);
+            human.setHealth(human.getHealth() - enemy.attackEnemy());
+            /*System.out.println("player is skipping turn!");
             AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
             System.out.println("enemy chose: " + enemyBehaviour);
             switch (enemyBehaviour) {
                 case DEFEND -> enemy.defendFromEnemy();
                 case ATTACK -> human.setHealth(human.getHealth() - enemy.attackEnemy());
-            }
+            }*/
             human.setStunned(false);
             isPlayersTurn = FALSE;
             return;
         } else if (!isPlayersTurn && enemy.isStunned()) { //если ход врага и он пропускате ход из за стана - то игрок 
                                                             //только атакует его тк метод обрабатывает именно атаку игрока
-            System.out.println(enemy.getName() + " is skipping turn!");
+            System.out.println("enemy is skipping turn!");
             AttackType humanBehaviour = AttackType.ATTACK;//оно задается но не используется в методе
             enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy() * 0.5));
             enemy.setStunned(false);
@@ -159,13 +169,13 @@ public class Fight {
                     if (isPlayersTurn){
                         if (Math.random() < 0.5) {//этот иф правильный
                             enemy.setStunned(true); // добавь поле и обработку stun-статуса
-                            System.out.println(enemy.getName() + " is stunned!");
+                            System.out.println("enemy is stunned!");
                         }
                         isPlayersTurn = FALSE;
                     } else {
                         if (Math.random() < 0.5) {//этот иф правильный
                             human.setStunned(true); // добавь поле и обработку stun-статуса
-                            System.out.println(human.getName() + " is stunned!");
+                            System.out.println("player is stunned!");
                         }
                         isPlayersTurn = TRUE;
                     }
