@@ -35,7 +35,8 @@ public class BattleFrame extends JFrame {
         this.human = human;
         this.enemy = enemy;
         this.game = game;
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
@@ -88,6 +89,7 @@ public class BattleFrame extends JFrame {
         updateHealthLabels();
         checkWinCondition();
         checkLoseCondition();
+        System.out.println("-------------------");
     }
 
     public void onDefendClicked(ActionEvent e) {
@@ -104,6 +106,7 @@ public class BattleFrame extends JFrame {
                                                                             //который соответствует состоянию оглушения игрока, который будет находиться в это классе
                                                                             //но метод обработки оглушений будет в Fight
         }
+        System.out.println("-------------------");
     }
 
     public void onItemsClicked(ActionEvent e) {

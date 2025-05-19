@@ -52,13 +52,14 @@ public class MainFrame extends JFrame {
     }
 
     public void onStartNewGameClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Начать новую игру' нажата.");
+        System.out.println("Button 'Start new game' pressed.");
         // Пока просто выводим сообщение
         human = game.NewHuman();
         enemy = game.NewEnemy();
         BattleFrame battleFrame = new BattleFrame(human, enemy, game);
         battleFrame.setVisible(true);
         setVisible(false);
+        System.out.println("-------------------");
         //Тут создание нового human и enemy и передача их в battleframe при создании
     }
 
