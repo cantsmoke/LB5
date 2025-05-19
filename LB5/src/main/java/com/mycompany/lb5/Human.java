@@ -55,6 +55,6 @@ public class Human extends Player{
     
     @Override
     public String getName(){
-        return "You";
+        return "Kitana";
     }
 }

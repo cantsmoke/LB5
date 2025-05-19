@@ -47,8 +47,8 @@ public class BattleFrame extends JFrame {
     private void initializeComponents() {
         // Информация о здоровье
         JPanel healthPanel = new JPanel(new GridLayout(2, 1, 10, 10));
-        lblPlayerHealth = new JLabel("Здоровье героя: " + human.getHealth(), SwingConstants.CENTER);
-        lblEnemyHealth = new JLabel("Здоровье врага: " + enemy.getHealth(), SwingConstants.CENTER);
+        lblPlayerHealth = new JLabel("Здоровье " + human.getName() + " (вы): " + human.getHealth(), SwingConstants.CENTER);
+        lblEnemyHealth = new JLabel("Здоровье " + enemy.getName() + " (враг): " + enemy.getHealth(), SwingConstants.CENTER);
         lblPlayerHealth.setFont(new Font("Arial", Font.BOLD, 18));
         lblEnemyHealth.setFont(new Font("Arial", Font.BOLD, 18));
         healthPanel.add(lblPlayerHealth);
@@ -78,12 +78,12 @@ public class BattleFrame extends JFrame {
     }
 
     private void updateHealthLabels() {
-        lblPlayerHealth.setText("Здоровье героя: " + human.getHealth());
-        lblEnemyHealth.setText("Здоровье врага: " + enemy.getHealth());
+        lblPlayerHealth.setText("Здоровье " + human.getName() + " (вы): " + human.getHealth());
+        lblEnemyHealth.setText("Здоровье " + enemy.getName() + " (враг): " + enemy.getHealth());
     }
 
     public void onAttackClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Атаковать' нажата.");
+        System.out.println("Button 'Attack' pressed");
         game.fight.performPlayerAction(human, enemy, AttackType.ATTACK);
         updateHealthLabels();
         checkWinCondition();
@@ -91,7 +91,7 @@ public class BattleFrame extends JFrame {
     }
 
     public void onDefendClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Защититься' нажата.");
+        System.out.println("Button 'Defend' pressed");
         game.fight.performPlayerAction(human, enemy, AttackType.DEFEND);
         updateHealthLabels();
         checkWinCondition();
@@ -99,7 +99,7 @@ public class BattleFrame extends JFrame {
     }
 
     public void onItemsClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Предметы' нажата.");
+        System.out.println("Button 'Items' pressed.");
         InventoryDialog inventoryDialog = new InventoryDialog(this);
         inventoryDialog.setVisible(true);
     }
