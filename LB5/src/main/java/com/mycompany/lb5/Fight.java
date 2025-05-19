@@ -74,7 +74,7 @@ public class Fight {
                                                             //только атакует его тк метод обрабатывает именно атаку игрока
             System.out.println("enemy is skipping turn!");
             AttackType humanBehaviour = AttackType.ATTACK;//оно задается но не используется в методе
-            enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy() * 0.5));
+            enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy()));
             enemy.setStunned(false);
             isPlayersTurn = true;
             return;
@@ -137,7 +137,7 @@ public class Fight {
                                                             //только атакует его тк метод обрабатывает именно атаку игрока
             System.out.println("enemy is skipping turn!");
             AttackType humanBehaviour = AttackType.ATTACK;//оно задается но не используется в методе
-            enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy() * 0.5));
+            enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy()));
             enemy.setStunned(false);
             isPlayersTurn = true;
             return;
