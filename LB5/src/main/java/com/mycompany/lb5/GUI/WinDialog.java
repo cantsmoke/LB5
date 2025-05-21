@@ -17,10 +17,12 @@ public class WinDialog extends JDialog {
 
     private JButton btnNext;
     private JFrame parentFrame;
+    private MainFrame mainFGrame;
 
-    public WinDialog(JFrame parent) {
+    public WinDialog(JFrame parent, MainFrame mainFrame) {
         super(parent, "Победа!", true); // модальное окно
-        this.parentFrame = parent; // Сохраняем родительское окно
+        this.parentFrame = parent;
+        this.mainFGrame = mainFrame;// Сохраняем родительское окно
         setSize(400, 200);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout(10, 10));
@@ -49,7 +51,7 @@ public class WinDialog extends JDialog {
         btnNext.addActionListener(this::onNextClicked);
     }
 
-    public void onNextClicked(ActionEvent e) {
+    /*public void onNextClicked(ActionEvent e) {
         System.out.println("Кнопка 'Далее' нажата.");
         dispose(); // Закрываем текущий диалог
         Player human = MainFrame.game.NewHuman();
@@ -57,5 +59,22 @@ public class WinDialog extends JDialog {
         // Открываем новый BattleFrame
         BattleFrame battleFrame = new BattleFrame(human, enemy, MainFrame.game);
         battleFrame.setVisible(true);
+    }*/
+    
+    public void onNextClicked(ActionEvent e) {
+        System.out.println("Кнопка 'Далее' нажата.");
+        dispose(); // закрыть текущий диалог
+
+        if (currentLocation < totalLocations) {
+            // Перейти к следующей локации
+            BattleFrame nextBattle = new BattleFrame(human, game.NewEnemy(), game, currentLocation + 1, totalLocations);
+            nextBattle.setVisible(true);
+        } else {
+            // Все локации пройдены
+            JOptionPane.showMessageDialog(null, "Вы прошли все локации!");
+            MainFrame mainMenu = new MainFrame();
+            mainMenu.setVisible(true);
+        }
     }
+    
 }

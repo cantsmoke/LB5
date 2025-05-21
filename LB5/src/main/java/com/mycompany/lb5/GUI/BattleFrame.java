@@ -29,12 +29,17 @@ public class BattleFrame extends JFrame {
     private final Player human;
     private final Player enemy;
     private final Game game;
+    private final int currentLocation;
+    private final int totalLocations;
+    
 
-    public BattleFrame(Player human, Player enemy, Game game) {
+    public BattleFrame(Player human, Player enemy, Game game, int currentLocation, int totalLocations) {
         super("Битва");
         this.human = human;
         this.enemy = enemy;
         this.game = game;
+        this.currentLocation = currentLocation;
+        this.totalLocations = totalLocations;
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
@@ -126,9 +131,25 @@ public class BattleFrame extends JFrame {
     private void checkLoseCondition() {
         if (human.getHealth() <= 0) {
             JOptionPane.showMessageDialog(this, "Вы проиграли!");
-            //логика начала боя заново
-            dispose(); // Закрыть окно боя
+            //логика начала боя заново с тем же врагом
+            System.out.println("-------------------");
+            System.out.println("Fight restarts");
+            System.out.println("-------------------");
+            resetBattle();
+            //dispose(); // Закрыть окно боя
         }
+    }
+    
+    private void resetBattle() {
+        // Сбрасываем здоровье к максимальному
+        human.setNewHealth(human.getMaxHealth());
+        enemy.setNewHealth(enemy.getMaxHealth());
+
+        // Очищаем статусы, если есть
+        human.resetStatus(); // например, isStunned = false;
+        enemy.resetStatus();
+
+        updateHealthLabels();
     }
     
     private boolean checkIfPlayerStunned(){

@@ -58,6 +58,10 @@ public abstract class Player {
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
+    
+    public int getMaxHealth(int maxHealth) {
+        return this.maxHealth;
+    }
 
     public void setDamage(int damage) {
         this.damage = damage;
@@ -106,6 +110,10 @@ public abstract class Player {
 
     public boolean isStunned() {
         return this.stunned;
+    }
+    
+    public void resetStatus() {
+        this.stunned = false;
     }
 
     public List<AttackType> getPlayerActionsHistory() {
