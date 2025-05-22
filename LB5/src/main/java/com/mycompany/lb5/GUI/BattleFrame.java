@@ -49,6 +49,22 @@ public class BattleFrame extends JFrame {
         addComponentsToFrame();
         setupActions();
     }
+    
+    public int getCurrentLocation(){
+        return this.currentLocation;
+    }
+    
+    public int getTotalLocations(){
+        return this.totalLocations;
+    }
+    
+    public Player getHuman(){
+        return this.human;
+    }
+    
+    public Game getGame(){
+        return this.game;
+    }
 
     private void initializeComponents() {
         // Информация о здоровье

@@ -20,6 +20,10 @@ public class MainFrame extends JFrame {
     private JButton btnNewGame;
     private JButton btnShowResults;
     private int selectedLocations = 1; // по умолчанию
+    private static MainFrame instance;
+    /*public static MainFrame getInstance(){
+        return instance;
+    }*/
     
     public static Game game = new Game();
     Human human = null;
@@ -27,6 +31,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         super("Игра: Битва героев");
+        //instance = this;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
         setLocationRelativeTo(null); // окно по центру экрана
