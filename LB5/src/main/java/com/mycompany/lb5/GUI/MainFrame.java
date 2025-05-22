@@ -87,7 +87,7 @@ public class MainFrame extends JFrame {
     
     private void startFirstLocation(Player human, int currentLocation) {
         Player enemy = game.NewEnemy(); // создаём первого врага
-        BattleFrame battleFrame = new BattleFrame(human, enemy, game, currentLocation, selectedLocations);
+        BattleFrame2 battleFrame = new BattleFrame2(human, enemy, game, currentLocation, selectedLocations);
         battleFrame.setVisible(true);
     }
 
