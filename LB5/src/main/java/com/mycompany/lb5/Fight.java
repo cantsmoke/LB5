@@ -37,6 +37,10 @@ public class Fight {
         if (history.isEmpty()) return AttackType.DEFEND; // По умолчанию
         return history.get(history.size() - 1);
     }
+    
+    public boolean getIsPlayerTurn(){
+        return this.isPlayersTurn;
+    }
 
 
     public void performPlayerAction(Player human, Player enemy, AttackType action) {

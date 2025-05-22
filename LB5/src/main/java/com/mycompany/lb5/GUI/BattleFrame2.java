@@ -25,7 +25,7 @@ public class BattleFrame2 extends JFrame {
     private JLabel lblEnemyDamage, lblEnemyLevel, lblEnemyName;
     private JLabel playerScoreLabel, playerExpLabel;
     private JTextArea logArea;
-    private JLabel turnLabel, stunLabel;
+    private JLabel turnLabel, playerStunLabel, enemyStunLabel;
     
 
     private final Player human;
@@ -168,12 +168,16 @@ public class BattleFrame2 extends JFrame {
         center.add(scrollPane);
 
         // Ход и оглушение
-        turnLabel = new JLabel("Ход: игрока");
-        stunLabel = new JLabel("Оглушен: нет");
+        turnLabel = new JLabel("Ход игрока: " + game.fight.getIsPlayerTurn());
+        playerStunLabel = new JLabel("Игрок оглушен: " + human.isStunned());
+        enemyStunLabel = new JLabel("Враг оглушен: "+ enemy.isStunned());
+        
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         statusPanel.add(turnLabel);
         statusPanel.add(Box.createHorizontalStrut(10));
-        statusPanel.add(stunLabel);
+        statusPanel.add(playerStunLabel);
+        statusPanel.add(enemyStunLabel);
+        //statusPanel.add(stunLabel);
         center.add(statusPanel);
 
         return center;
@@ -210,6 +214,7 @@ public class BattleFrame2 extends JFrame {
         updateHealthLabels();
         checkWinCondition();
         checkLoseCondition();
+        turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
         System.out.println("-------------------");
     }
 
@@ -219,14 +224,9 @@ public class BattleFrame2 extends JFrame {
         updateHealthLabels();
         checkWinCondition();
         checkLoseCondition();
-        /*if (checkIfPlayerStunned()){
-            System.out.println("Player skips turn");
-            game.fight.performPlayerAction(human, enemy, AttackType.ATTACK);//впоследствии метод в методе надо будет 
-                                                                            //разбить, т.к. он выполняет много логики
-                                                                            //тут будет обрабатываться метод, 
-                                                                            //который соответствует состоянию оглушения игрока, который будет находиться в это классе
-                                                                            //но метод обработки оглушений будет в Fight
-        }*/ // этого не должно быть, из за условия в классе Fight
+        playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
+        enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
+        turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
         System.out.println("-------------------");
     }
 
