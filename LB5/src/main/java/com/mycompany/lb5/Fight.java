@@ -191,7 +191,7 @@ public class Fight {
         dialog.setBounds(300, 150, 700, 600);
         if (human.getHealth() > 0) {
             label.setText("You win");
-            ((Human) human).setWin();
+            ((Human) human).addWin();
 
             if (enemy instanceof ShaoKahn) {
                 action.AddItems(38, 23, 8, items);
@@ -215,7 +215,7 @@ public class Fight {
             JLabel label1, JLabel label2) {
         String text = "Победа не на вашей стороне";
         if (human.getHealth() > 0) {
-            human.setWin();
+            human.addWin();
             action.AddPoints(human, action.getEnemyes());
             text = "Победа на вашей стороне";
         }

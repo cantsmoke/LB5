@@ -17,6 +17,7 @@ public abstract class Player {
     protected int maxHealth;
     protected int damage;
     protected int attack;
+    protected int winAmount;
     
     ArrayList<AttackType> playerActionsHistory = new ArrayList<>();
 
@@ -25,6 +26,7 @@ public abstract class Player {
         this.health = health;
         this.maxHealth = health;
         this.damage = damage;
+        this.winAmount = 0;
     }
 
     public int getLevel() {
@@ -119,17 +121,13 @@ public abstract class Player {
     public List<AttackType> getPlayerActionsHistory() {
         return this.playerActionsHistory;
     }
-
-    public String getScore() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    
+    public void addWin(){
+        this.winAmount++;
     }
-
-    public String getCurrentExp() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public String getNextLevelExp() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    
+    public int getWinAmount(){
+        return this.winAmount;
     }
 
 }

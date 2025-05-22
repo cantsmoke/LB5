@@ -49,8 +49,8 @@ public class Human extends Player{
     public void setNextExperience(int e){
         this.nextexperience=e;
     }
-    public void setWin(){
-        this.win++;
+    public void addWin(){
+        this.winAmount++;
     }
     
     @Override

@@ -5,7 +5,7 @@
 package com.mycompany.lb5;
 
 import com.mycompany.lb5.GUI.MainFrame;
-import com.mycompany.lb5.JFrames;
+//import com.mycompany.lb5.JFrames;
 import javax.swing.SwingUtilities;
 
 /**

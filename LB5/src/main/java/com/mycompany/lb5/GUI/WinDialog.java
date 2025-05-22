@@ -16,9 +16,9 @@ import java.awt.event.ActionEvent;
 public class WinDialog extends JDialog {
 
     private JButton btnNext;
-    private BattleFrame parentFrame;
+    private BattleFrame2 parentFrame;
     
-    public WinDialog(BattleFrame parentFrame) {
+    public WinDialog(BattleFrame2 parentFrame) {
         super(parentFrame, "Победа!", true); // модальное окно
         this.parentFrame = parentFrame;// Сохраняем родительское окно
         setSize(400, 200);
@@ -65,7 +65,7 @@ public class WinDialog extends JDialog {
 
         if (parentFrame.getCurrentLocation() < parentFrame.getTotalLocations()) {
             // Перейти к следующей локации
-            BattleFrame nextBattle = new BattleFrame(parentFrame.getHuman(), parentFrame.getGame().NewEnemy(), parentFrame.getGame(), parentFrame.getCurrentLocation() + 1, parentFrame.getTotalLocations());
+            BattleFrame2 nextBattle = new BattleFrame2(parentFrame.getHuman(), parentFrame.getGame().NewEnemy(), parentFrame.getGame(), parentFrame.getCurrentLocation() + 1, parentFrame.getTotalLocations());
             nextBattle.setVisible(true);
         } else {
             // Все локации пройдены

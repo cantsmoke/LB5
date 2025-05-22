@@ -138,8 +138,8 @@ public class BattleFrame extends JFrame {
 
     private void checkWinCondition() {
         if (enemy.getHealth() <= 0) {
-            WinDialog winDialog = new WinDialog(this);
-            winDialog.setVisible(true);
+            //WinDialog winDialog = new WinDialog(this);
+            //winDialog.setVisible(true);
             setVisible(false);
         }
     }

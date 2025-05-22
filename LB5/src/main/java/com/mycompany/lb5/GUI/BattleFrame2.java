@@ -17,8 +17,6 @@ import java.awt.event.ActionEvent;
 
 public class BattleFrame2 extends JFrame {
 
-    private JLabel lblPlayerHealth;
-    private JLabel lblEnemyHealth;
     private JButton btnAttack;
     private JButton btnDefend;
     private JButton btnItems;
@@ -30,9 +28,6 @@ public class BattleFrame2 extends JFrame {
     private JLabel turnLabel, stunLabel;
     
 
-    // ���������� ��� ������������
-    private int playerHealth = 100;
-    private int enemyHealth = 100;
     private final Player human;
     private final Player enemy;
     private final Game game;
@@ -43,13 +38,14 @@ public class BattleFrame2 extends JFrame {
     public BattleFrame2(Player human, Player enemy, Game game, int currentLocation, int totalLocations) {
         super("Битва");
         this.human = human;
+        human.setHealth(human.getMaxHealth());
         this.enemy = enemy;
         this.game = game;
         this.currentLocation = currentLocation;
         this.totalLocations = totalLocations;
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1500, 900);
+        setSize(1000, 700);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
         initializeComponents();
@@ -112,8 +108,10 @@ public class BattleFrame2 extends JFrame {
         JProgressBar hpBar = new JProgressBar(0, player.getMaxHealth());
         hpBar.setValue(player.getHealth());
         hpBar.setStringPainted(true);
+        
         if(isHuman) playerHpBar = hpBar;
         else enemyHpBar = hpBar;
+        hpBar.setForeground(Color.GREEN);
 
         panel.add(new JLabel(isHuman ? "Игрок" : "Враг", SwingConstants.CENTER));
         panel.add(hpBar);
@@ -194,10 +192,16 @@ public class BattleFrame2 extends JFrame {
     private void updateHealthLabels() {
         playerHpBar.setValue(human.getHealth());
         enemyHpBar.setValue(enemy.getHealth());
+        if(human.getHealth() < human.getMaxHealth() * 0.25)
+            playerHpBar.setForeground(Color.RED);
+        else if(enemy.getHealth() < enemy.getMaxHealth() * 0.25){  
+            enemyHpBar.setForeground(Color.RED);
+        }
         lblPlayerDamage.setText("Урон: " + human.getDamage());
         lblPlayerLevel.setText("Уровень: " + human.getLevel());
         lblEnemyDamage.setText("Урон: " + enemy.getDamage());
         lblEnemyLevel.setText("Уровень: " + enemy.getLevel());
+        
     }
 
     public void onAttackClicked(ActionEvent e) {
@@ -234,8 +238,10 @@ public class BattleFrame2 extends JFrame {
 
     private void checkWinCondition() {
         if (enemy.getHealth() <= 0) {
-            //WinDialog winDialog = new WinDialog(this);
-            //winDialog.setVisible(true);
+            human.addWin();
+            System.out.println("Win amount = " + human.getWinAmount());
+            WinDialog winDialog = new WinDialog(this);
+            winDialog.setVisible(true);
             setVisible(false);
         }
     }
@@ -262,6 +268,9 @@ public class BattleFrame2 extends JFrame {
         enemy.resetStatus();
 
         updateHealthLabels();
+        
+        playerHpBar.setForeground(Color.GREEN);
+        enemyHpBar.setForeground(Color.GREEN);
     }
     
     private boolean checkIfPlayerStunned(){
