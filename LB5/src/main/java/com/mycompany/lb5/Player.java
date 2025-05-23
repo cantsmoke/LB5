@@ -74,6 +74,7 @@ public abstract class Player {
     }
 
     public abstract String getName();
+    public abstract String getIconSource();
     
     public int attackEnemy(){
         playerActionsHistory.add(AttackType.ATTACK);

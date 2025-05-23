@@ -18,4 +18,9 @@ public class SubZero extends Player{
     public String getName(){
         return "Sub-Zero";
     }
+    
+    public String getIconSource(){
+        return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Sub-Zero_in_MK1.png";
+    }
+    
 }

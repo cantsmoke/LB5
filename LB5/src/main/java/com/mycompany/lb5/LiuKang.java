@@ -18,4 +18,9 @@ public class LiuKang extends Player{
     public String getName(){
         return "Liu Kang";
     }
+    
+    public String getIconSource(){
+        return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Liukangmk11.png";
+    }
+    
 }

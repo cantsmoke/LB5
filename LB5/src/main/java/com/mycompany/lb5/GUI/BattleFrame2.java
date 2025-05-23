@@ -113,7 +113,7 @@ public class BattleFrame2 extends JFrame {
         else enemyHpBar = hpBar;
         hpBar.setForeground(Color.GREEN);
 
-        panel.add(new JLabel(isHuman ? "Игрок" : "Враг", SwingConstants.CENTER));
+        panel.add(new JLabel(isHuman ? "Игрок " + player.getName() : "Враг " + player.getName(), SwingConstants.CENTER));
         panel.add(hpBar);
         panel.add(Box.createVerticalStrut(6));
 
@@ -132,15 +132,20 @@ public class BattleFrame2 extends JFrame {
         panel.add(Box.createVerticalStrut(10));
 
         // Картинка (иконку можешь пока не ставить)
-        JLabel picLabel = new JLabel();
-        // picLabel.setIcon( ... ); // Укажи, если будет картинка!
+        ImageIcon icon = null;
+        if(isHuman) {
+            icon = new ImageIcon("C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png");
+        } else {
+            icon = new ImageIcon(player.getIconSource());
+        }
+        JLabel picLabel = new JLabel("Текст", icon, JLabel.CENTER);
         panel.add(picLabel);
 
         // Имя
-        JLabel lblName = new JLabel(player.getName() + (isHuman ? " (вы)" : " (враг)"), SwingConstants.CENTER);
-        lblName.setFont(new Font("Arial", Font.BOLD, 13));
-        if(isHuman) lblPlayerName = lblName; else lblEnemyName = lblName;
-        panel.add(lblName);
+//        JLabel lblName = new JLabel(player.getName() + (isHuman ? " (вы)" : " (враг)"), SwingConstants.CENTER);
+//        lblName.setFont(new Font("Arial", Font.BOLD, 13));
+//        if(isHuman) lblPlayerName = lblName; else lblEnemyName = lblName;
+//        panel.add(lblName);
 
         panel.add(Box.createVerticalGlue());
         return panel;

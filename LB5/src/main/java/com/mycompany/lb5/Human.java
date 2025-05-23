@@ -57,4 +57,9 @@ public class Human extends Player{
     public String getName(){
         return "Kitana";
     }
+    
+    public String getIconSource(){
+        return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png";
+    }
+    
 }

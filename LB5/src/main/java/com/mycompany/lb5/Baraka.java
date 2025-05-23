@@ -19,4 +19,8 @@ public class Baraka extends Player{
         return "Baraka";
     }
     
+    public String getIconSource(){
+        return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Baraka_in_MK1.png";
+    }
+    
 }
