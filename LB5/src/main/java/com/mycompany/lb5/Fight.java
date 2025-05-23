@@ -5,6 +5,7 @@
 package com.mycompany.lb5;
 
 //ADD IMAGE!!!
+import static com.mycompany.lb5.ActionType.HEAL;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import java.util.List;
@@ -80,6 +81,17 @@ public class Fight {
                         isPlayersTurn = TRUE;
                     }
                     break;
+                    
+                case HEAL:
+                    if (isPlayersTurn){
+                        enemy.setHealth(enemy.getHealth() - human.attackEnemy()*2);
+                        isPlayersTurn = FALSE;
+                    } else {
+                        enemy.setHealth(enemy.getHealth() - human.attackEnemy()*2);
+                        isPlayersTurn = TRUE;
+                    }
+                    System.out.println("Enemy received double damage!");
+                    break;
             }
         }
     }
@@ -144,6 +156,17 @@ public class Fight {
                         }
                         isPlayersTurn = TRUE;
                     }
+                    break;
+                    
+                case HEAL:
+                    if (isPlayersTurn){
+                        enemy.setHealth((int) (enemy.getHealth() + (enemy.getMaxHealth() - enemy.getHealth()) * 0.5));
+                        isPlayersTurn = FALSE;
+                    } else {
+                        enemy.setHealth((int) (enemy.getHealth() + (enemy.getMaxHealth() - enemy.getHealth()) * 0.5));
+                        isPlayersTurn = TRUE;
+                    }
+                    System.out.println("Enemy healed!");
                     break;
             }
         }

@@ -21,7 +21,7 @@ public class WinDialog extends JDialog {
     public WinDialog(BattleFrame2 parentFrame) {
         super(parentFrame, "Победа!", true); // модальное окно
         this.parentFrame = parentFrame;// Сохраняем родительское окно
-        setSize(400, 200);
+        setSize(500, 200);
         setLocationRelativeTo(parentFrame);
         setLayout(new BorderLayout(10, 10));
 
@@ -30,7 +30,7 @@ public class WinDialog extends JDialog {
     }
 
     private void initializeComponents() {
-        JLabel messageLabel = new JLabel("Вы одержали победу!", SwingConstants.CENTER);
+        JLabel messageLabel = new JLabel("Вы одержали победу в локации №" + parentFrame.getCurrentLocation() + " из " + parentFrame.getTotalLocations() + " !", SwingConstants.CENTER);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(messageLabel, BorderLayout.CENTER);
 

@@ -14,20 +14,15 @@ public class CharacterAction {
         int defendCount = human.getDefendCount();
         int total = attackCount + defendCount;
 
-        // Если данных ещё недостаточно, выбираем на основе базовых вероятностей
         if (total < 15) {
             return Math.random() < attackProbability / 100.0 ? ActionType.ATTACK : ActionType.DEFEND;
         } else{
-            // Вычисляем склонность игрока
             double playerAggression = (double) attackCount / total;
             double playerDefense = (double) defendCount / total;
 
-            // Адаптируем вероятности врага
-            // Если игрок атакует часто, враг чаще будет защищаться и наоборот
             int adjustedAttackProb = (int) (attackProbability * playerDefense + defendProbability * playerDefense * 0.5);
             int adjustedDefendProb = (int) (defendProbability * playerAggression + attackProbability * playerAggression * 0.5);
 
-            // Нормализация до 100%
             int totalAdjusted = adjustedAttackProb + adjustedDefendProb;
             double normAttack = (double) adjustedAttackProb / totalAdjusted;
 
@@ -50,7 +45,12 @@ public class CharacterAction {
             enemyAction = adaptiveBehaviourChooser(60, 40, human);
         }
         if (enemy instanceof ShaoKahn) {
-            enemyAction = adaptiveBehaviourChooser(45, 55, human);
+            double healProbability = Math.random();
+            if(healProbability < 0.3 && enemy.getMaxHealth() != enemy.getHealth()){
+                enemyAction = ActionType.HEAL;
+            } else {
+                enemyAction = adaptiveBehaviourChooser(45, 55, human);
+            }
         }
         return enemyAction;
     }
