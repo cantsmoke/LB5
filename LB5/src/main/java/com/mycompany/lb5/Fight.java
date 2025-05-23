@@ -95,7 +95,6 @@ public class Fight {
             return;
         } else if (!isPlayersTurn && enemy.isStunned()) {
             System.out.println("enemy is skipping turn!");
-            enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy()));
             enemy.setStunned(false);
             isPlayersTurn = true;
             return;
