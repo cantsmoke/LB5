@@ -28,4 +28,9 @@ public class Baraka extends Player{
         return 110 + level*30;
     }
     
+    @Override
+    public int returnExperienceForWin() {
+        return 20;
+    }
+    
 }

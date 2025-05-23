@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -25,12 +23,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author Мария
  */
 public class Game {
-
+    
+    private static Player enemies[] = new Player[4];
     CharacterAction action = new CharacterAction();
     public Fight fight = new Fight();
     private ArrayList<Result> results = new ArrayList<>();
     
     public List<Player> generateEnemiesForLocation(int playerLevel) {
+        
+        setEnemies();
+        
         List<Player> enemies = new ArrayList<>();
         
         int count = playerLevel + 3 +  new Random().nextInt(2);
@@ -46,14 +48,44 @@ public class Game {
     }
 
     public Player NewBoss(){
-        Player boss = action.makeBoss();
+        Player boss = makeBoss();
         return boss;
     }
 
     public Player NewEnemy() {
-        action.setEnemies();
-        Player enemy = action.ChooseEnemy();
+        Player enemy = ChooseEnemy();
         return enemy;
+    }
+    
+    public static void setEnemies() {
+        enemies[0] = EnemyFactory.createEnemy(EnemyType.TANK);      
+        enemies[1] = EnemyFactory.createEnemy(EnemyType.MAGICIAN);      
+        enemies[2] = EnemyFactory.createEnemy(EnemyType.FIGHTER);      
+        enemies[3] = EnemyFactory.createEnemy(EnemyType.SOLDIER);   
+    }
+
+    public Player ChooseEnemy() {
+        int randomEnemyIndex = (int) (Math.random() * 4);
+        Player enemy = null;
+        switch (randomEnemyIndex) {
+            case 0:
+                enemy = enemies[0];
+                break;
+            case 1:
+                enemy = enemies[1];
+                break;
+            case 2:
+                enemy = enemies[2];
+                break;
+            case 3:
+                enemy = enemies[3];
+                break;
+        }
+        return enemy;
+    }
+    
+    public Player makeBoss(){
+        return EnemyFactory.createEnemy(EnemyType.BOSS);
     }
     
     public Human NewHuman(){

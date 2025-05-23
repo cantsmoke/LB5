@@ -74,5 +74,10 @@ public class Human extends Player{
     public void setRequiredExperiance() {
         this.nextexperience = nextexperience + 40;
     }
+
+    @Override
+    public int returnExperienceForWin() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

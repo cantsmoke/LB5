@@ -133,5 +133,7 @@ public abstract class Player {
     public int getWinAmount(){
         return this.winAmount;
     }
+    
+    public abstract int returnExperienceForWin();
 
 }

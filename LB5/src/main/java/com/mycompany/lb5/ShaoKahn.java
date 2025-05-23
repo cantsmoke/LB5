@@ -28,4 +28,9 @@ public class ShaoKahn extends Player{
         return 250 + level*50;
     }
     
+    @Override
+    public int returnExperienceForWin() {
+        return 40;
+    }
+    
 }

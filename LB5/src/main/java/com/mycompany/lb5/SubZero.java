@@ -27,5 +27,10 @@ public class SubZero extends Player{
     public int getReceivedPoints() {
         return 100 + level*50;
     }
+
+    @Override
+    public int returnExperienceForWin() {
+        return 20;
+    }
     
 }

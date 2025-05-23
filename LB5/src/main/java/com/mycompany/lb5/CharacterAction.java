@@ -3,62 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5;
-
-import java.awt.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-
 /**
  *
  * @author Мария
  */
 public class CharacterAction {
-
-    private final int experience_for_next_level[] = {40, 90, 180, 260, 410, 1000};
-
-    private Player enemyes[] = new Player[5];
-
-    private Player enemyy = null;
-
-    public void setEnemies() {
-        enemyes[0] = EnemyFactory.createEnemy(EnemyType.TANK);      
-        enemyes[1] = EnemyFactory.createEnemy(EnemyType.MAGICIAN);      
-        enemyes[2] = EnemyFactory.createEnemy(EnemyType.FIGHTER);      
-        enemyes[3] = EnemyFactory.createEnemy(EnemyType.SOLDIER);   
-        //enemyes[4] = EnemyFactory.createEnemy(EnemyType.BOSS);
-    }
-
-    public Player[] getEnemyes() {
-        return this.enemyes;
-    }
-
-    public Player ChooseEnemy() {
-        int randomEnemyIndex = (int) (Math.random() * 4);
-        switch (randomEnemyIndex) {
-            case 0:
-                enemyy = enemyes[0];
-                break;
-            case 1:
-                enemyy = enemyes[1];
-                break;
-            case 2:
-                enemyy = enemyes[2];
-                break;
-            case 3:
-                enemyy = enemyes[3];
-                break;
-        }
-        return enemyy;
-    }
-    
-    public Player makeBoss(){
-        return EnemyFactory.createEnemy(EnemyType.BOSS);
-    }
     
     public static AttackType adaptiveBehaviourChooser(int attackProbability, int defendProbability, Player human){
         int attackCount = human.getAttackCount();

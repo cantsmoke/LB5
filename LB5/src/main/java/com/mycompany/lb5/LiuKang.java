@@ -28,4 +28,9 @@ public class LiuKang extends Player{
         return 120 + level*20;
     }
     
+    @Override
+    public int returnExperienceForWin() {
+        return 20;
+    }
+    
 }

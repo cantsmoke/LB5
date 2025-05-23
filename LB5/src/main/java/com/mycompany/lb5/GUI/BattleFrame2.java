@@ -23,8 +23,8 @@ public class BattleFrame2 extends JFrame {
     private JButton btnDefend;
     private JButton btnItems;
     private JProgressBar playerHpBar, enemyHpBar;
-    private JLabel lblPlayerDamage, lblPlayerLevel, lblPlayerName;
-    private JLabel lblEnemyDamage, lblEnemyLevel, lblEnemyName;
+    private JLabel lblPlayerDamage, lblPlayerLevel;
+    private JLabel lblEnemyDamage, lblEnemyLevel;
     private JLabel playerScoreLabel, playerExpLabel;
     private JTextArea logArea;
     private JLabel turnLabel, playerStunLabel, enemyStunLabel;
@@ -214,6 +214,9 @@ public class BattleFrame2 extends JFrame {
         lblEnemyDamage.setText("Урон: " + enemy.getDamage());
         lblEnemyLevel.setText("Уровень: " + enemy.getLevel());
         
+        playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
+        enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
+        
     }
 
     public void onAttackClicked(ActionEvent e) {
@@ -257,7 +260,7 @@ public class BattleFrame2 extends JFrame {
                 "Победа!", 
                 JOptionPane.INFORMATION_MESSAGE);
             
-            human.gainExperience(20); //надо поменять чтобы от врага зависело кол-во получаемого опыта
+            human.gainExperience(enemy.returnExperienceForWin());
             checkLevelUpdate();
             playerExpLabel.setText("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
             
@@ -277,12 +280,12 @@ public class BattleFrame2 extends JFrame {
         if (human.getExperience() >= human.getRequiredExperiance()){
             human.levelUp();
             showLevelUpDialog();
-            human.setRequiredExperiance();
+            human.setRequiredExperiance(); //добавить изменение хар-ик врагов
         }
     }
     
     private void showLevelUpDialog() {
-        Object[] options = {"Увеличить урон (+20%)", "Увеличить здоровье (+15%)"};
+        Object[] options = {"Увеличить урон (+20%)", "Увеличить здоровье (+25%)"};
         int choice = JOptionPane.showOptionDialog(null,
                 "Вы достигли уровня " + human.getLevel() + "! Выберите улучшение:",
                 "Повышение уровня",

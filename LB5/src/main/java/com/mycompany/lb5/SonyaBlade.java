@@ -28,4 +28,9 @@ public class SonyaBlade extends Player{
         return 120 + level*10;
     }
     
+    @Override
+    public int returnExperienceForWin() {
+        return 20;
+    }
+    
 }
