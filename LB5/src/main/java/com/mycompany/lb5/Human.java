@@ -18,14 +18,21 @@ public class Human extends Player{
     private int win;
     private int nextexperience;
     
+    private Inventory inventory;
+    
     public Human(int level, int health, int  damage){
         super (level, health, damage);
         this.points=0;
         this.experience=0;
         this.nextexperience=40;
         this.win=0;
+        
+        inventory = new Inventory();
     }
     
+    public Inventory getInventory(){
+        return this.inventory;
+    }
 
     public int getPoints(){
         return this.points;

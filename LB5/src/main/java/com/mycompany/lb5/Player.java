@@ -52,6 +52,10 @@ public abstract class Player {
     public void setHealth(int health) {
         this.health = health;
     }
+    
+    public void heal(double hu){
+        this.health = (int) (health + maxHealth * hu);
+    }
 
     public void setNewHealth(int health) {
         this.health = health;

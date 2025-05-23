@@ -8,6 +8,10 @@ package com.mycompany.lb5.GUI;
  *
  * @author Arseniy
  */
+import com.mycompany.lb5.BigHealthPotion;
+import com.mycompany.lb5.Inventory;
+import com.mycompany.lb5.RessurectionCross;
+import com.mycompany.lb5.SmallHealthPotion;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,17 +20,9 @@ public class InventoryDialog extends JDialog {
 
     private JList<String> itemsList;
     private JButton btnUseItem;
-    private JFrame parentFrame; 
+    private BattleFrame2 parentFrame; 
 
-    // Пример списка предметов
-    private String[] inventoryItems = {
-            "Зелье здоровья",
-            "Щит защиты",
-            "Меч силы",
-            "Лук меткости"
-    };
-
-    public InventoryDialog(JFrame parent) {
+    public InventoryDialog(BattleFrame2 parent) {
         super(parent, "Мешок предметов", true); // модальное окно
         this.parentFrame = parent; // Сохраняем родительское окно
         setSize(400, 300);
@@ -34,13 +30,12 @@ public class InventoryDialog extends JDialog {
         setLayout(new BorderLayout(10, 10));
 
         initializeComponents();
-        addComponentsToDialog();
         setupActions();
     }
 
     private void initializeComponents() {
         // Список предметов
-        itemsList = new JList<>(inventoryItems);
+        itemsList = new JList<>(parentFrame.getHuman().getInventory().getInventoryInfo());
         itemsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         itemsList.setLayoutOrientation(JList.VERTICAL);
         itemsList.setVisibleRowCount(-1); // чтобы не было строк по умолчанию
@@ -59,14 +54,10 @@ public class InventoryDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private void addComponentsToDialog() {
-        // Уже добавлено через add()
-    }
-
     private void setupActions() {
         btnUseItem.addActionListener(this::onUseItemClicked);
     }
-
+    
     public void onUseItemClicked(ActionEvent e) {
         String selectedItem = itemsList.getSelectedValue();
 
@@ -75,16 +66,53 @@ public class InventoryDialog extends JDialog {
             return;
         }
 
-        System.out.println("Используется предмет: " + selectedItem);
+        // Пример связанного инвентаря
+        Inventory inventory = parentFrame.getHuman().getInventory(); // или как у вас хранится ссылка на инвентарь
 
-        boolean canUseItem = Math.random() > 0.5;
+        // Попробуем использовать предмет
+        boolean success = false;
+        String usedItemName = null;
 
-        if (canUseItem) {
-            JOptionPane.showMessageDialog(this, "Вы использовали предмет: " + selectedItem);
+        // В зависимости от формата item (например, "Большое зелье лечения: 3")
+        // Лучше выделить только название:
+        String itemType = selectedItem.split(":")[0].trim();
+
+        switch (itemType) {
+            case "Большое зелье лечения":
+                if (inventory.getBigHealthPotionCount() > 0) {
+                    BigHealthPotion potion = inventory.getBigHealthPotion();
+                    parentFrame.getHuman().heal(0.5);
+                    usedItemName = "Большое зелье лечения";
+                    parentFrame.updateLabels();
+                    success = true;
+                }
+                break;
+            case "Малое зелье лечения":
+                if (inventory.getSmallHealthPotionCount() > 0) {
+                    SmallHealthPotion potion = inventory.getSmallHealthPotion();
+                    parentFrame.getHuman().heal(0.25);
+                    usedItemName = "Малое зелье лечения";
+                    parentFrame.updateLabels();
+                    success = true;
+                }
+                break;
+            case "Крест воскрешения":
+                if (inventory.getRessurectionCrossCount() > 0) {
+                    JOptionPane.showMessageDialog(this, "Вы не можете использовать этот предмет");
+                    success = false;
+                }
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "Неизвестный предмет: " + selectedItem, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                return;
+        }
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Вы использовали предмет: " + usedItemName);
+            dispose();
         } else {
-            ItemErrorDialog errorDialog = new ItemErrorDialog(parentFrame); // Используем parentFrame
-            errorDialog.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Закончились предметы или нельзя использовать: " + itemType, "Ошибка", JOptionPane.WARNING_MESSAGE);
+            dispose();
         }
     }
-
 }

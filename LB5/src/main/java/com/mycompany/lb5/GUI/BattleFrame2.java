@@ -9,9 +9,12 @@ package com.mycompany.lb5.GUI;
  * @author ababa
  */
 import com.mycompany.lb5.AttackType;
+import com.mycompany.lb5.BigHealthPotion;
 import com.mycompany.lb5.Game;
 import com.mycompany.lb5.Player;
 import com.mycompany.lb5.Human;
+import com.mycompany.lb5.RessurectionCross;
+import com.mycompany.lb5.SmallHealthPotion;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -201,13 +204,16 @@ public class BattleFrame2 extends JFrame {
         btnItems.addActionListener(this::onItemsClicked);
     }
 
-    private void updateHealthLabels() {
+    void updateLabels() {
         playerHpBar.setValue(human.getHealth());
         enemyHpBar.setValue(enemy.getHealth());
         if(human.getHealth() < human.getMaxHealth() * 0.25)
             playerHpBar.setForeground(Color.RED);
         else if(enemy.getHealth() < enemy.getMaxHealth() * 0.25){  
             enemyHpBar.setForeground(Color.RED);
+        } else {
+            playerHpBar.setForeground(Color.GREEN);
+            enemyHpBar.setForeground(Color.GREEN);
         }
         lblPlayerDamage.setText("Урон: " + human.getDamage());
         lblPlayerLevel.setText("Уровень: " + human.getLevel());
@@ -222,7 +228,7 @@ public class BattleFrame2 extends JFrame {
     public void onAttackClicked(ActionEvent e) {
         System.out.println("Button 'Attack' pressed");
         game.fight.performPlayerAction(human, enemy, AttackType.ATTACK);
-        updateHealthLabels();
+        updateLabels();
         checkWinCondition();
         checkLoseCondition();
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
@@ -232,7 +238,7 @@ public class BattleFrame2 extends JFrame {
     public void onDefendClicked(ActionEvent e) {
         System.out.println("Button 'Defend' pressed");
         game.fight.performPlayerAction(human, enemy, AttackType.DEFEND);
-        updateHealthLabels();
+        updateLabels();
         checkWinCondition();
         checkLoseCondition();
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
@@ -251,6 +257,7 @@ public class BattleFrame2 extends JFrame {
         if (enemy.getHealth() <= 0) {
             human.addWin();
             human.addPoints(enemy.getReceivedPoints());
+            
             currentEnemyIndex++;
             
             int defeatedNumber = currentEnemyIndex; // т.к. индекс увеличили
@@ -264,6 +271,9 @@ public class BattleFrame2 extends JFrame {
             checkLevelUpdate();
             playerExpLabel.setText("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
             
+            //тут вызвать метод обработки выпадения вещей
+            processItemDrop();
+            
             if (currentEnemyIndex < enemyList.size()) {//надо проверить
                 enemy = enemyList.get(currentEnemyIndex);
                 resetBattle(); // сбросить HP и статус
@@ -275,6 +285,24 @@ public class BattleFrame2 extends JFrame {
             }
         }
     }
+    
+    private void processItemDrop() {
+        double smallPotionDropP = Math.random();
+        double bigPotionDropP = Math.random();
+        double ressurectionCrossDropP = Math.random();
+
+        if (smallPotionDropP < 0.25) {
+            human.getInventory().addSmallHealthPotion(new SmallHealthPotion());
+            JOptionPane.showMessageDialog(this, "Вам выпало: малое зелье лечения!");
+        } else if (bigPotionDropP < 0.15) {
+            human.getInventory().addBigHealthPotion(new BigHealthPotion());
+            JOptionPane.showMessageDialog(this, "Вам выпало: большое зелье лечения!");
+        } else if (ressurectionCrossDropP < 0.50) {
+            human.getInventory().addRessurectionCross(new RessurectionCross());
+            JOptionPane.showMessageDialog(this, "Вам выпал: крест возрождения!");
+        }
+    }
+
 
     public void checkLevelUpdate(){
         if (human.getExperience() >= human.getRequiredExperiance()){
@@ -307,13 +335,35 @@ public class BattleFrame2 extends JFrame {
 
     private void checkLoseCondition() {
         if (human.getHealth() <= 0) {
-            JOptionPane.showMessageDialog(this, "Вы проиграли!");
-            System.out.println("-------------------");
-            System.out.println("Fight restarts");
-            System.out.println("-------------------");
-            resetBattle();
+            boolean resurrected = tryRessurection();
+            if (resurrected){
+                updateLabels();
+            } else {
+                JOptionPane.showMessageDialog(this, "Вы проиграли!");
+                System.out.println("-------------------");
+                System.out.println("Fight restarts");
+                System.out.println("-------------------");
+                resetBattle();
+            }
         }
     }
+    
+    
+    private boolean tryRessurection() {
+        if (human.getInventory().getRessurectionCrossCount() > 0) {
+            human.getInventory().getRessurectionCross();
+            int restored = (int) Math.ceil(human.getMaxHealth() * 0.05);
+            if (restored < 1) restored = 1;
+            human.setHealth(restored);
+            JOptionPane.showMessageDialog(this, 
+                "Крест возрождения спасает вас! Ваше здоровье восстановлено на 5% (" + restored + " HP).",
+                "Воскрешение", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+
+
     
     private void resetBattle() {
         // Сбрасываем здоровье к максимальному
@@ -333,7 +383,7 @@ public class BattleFrame2 extends JFrame {
         
         enemyHpBar.setMaximum(enemy.getMaxHealth());
 
-        updateHealthLabels();
+        updateLabels();
         
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
         enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
