@@ -368,6 +368,8 @@ public class BattleFrame2 extends JFrame {
 
         updateLabels();
         
+        logArea.setText("");
+        
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
         enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
         
