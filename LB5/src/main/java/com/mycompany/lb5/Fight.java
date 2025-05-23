@@ -29,45 +29,49 @@ public class Fight {
     }
 
 
-    public void performPlayerAction(Player human, Player enemy, ActionType action) {
-        System.out.println("player is first to perform action: " + isPlayersTurn);
+    public String performPlayerAction(Player human, Player enemy, ActionType action) {
+        String battleLog = null;
         switch (action) {
-            case ATTACK -> processPlayersAttack(human, enemy);
-            case DEFEND -> processPlayersDefend(human, enemy);
-            default -> throw new IllegalArgumentException("Такого типа соперника нет: " + action);
+            case ATTACK -> battleLog = processPlayersAttack(human, enemy);
+            case DEFEND -> battleLog = processPlayersDefend(human, enemy);
         }
+        return battleLog;
     }
 
-    private void processPlayersAttack(Player human, Player enemy) {
+    private String processPlayersAttack(Player human, Player enemy) {
+        StringBuilder log = new StringBuilder();
+        
         if (isPlayersTurn && human.isStunned()) {
-            System.out.println("player is skipping turn!");
+            log.append("Игрок пропускает ход из-за оглушения!\n");
             ActionType enemyBehaviour = ActionType.ATTACK;
-            System.out.println("enemy chose: " + enemyBehaviour);
+            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
             human.setHealth(human.getHealth() - enemy.attackEnemy());
             human.setStunned(false);
             isPlayersTurn = FALSE;
-            return;
+            log.append("-----------------\n");
+            return log.toString();
         } else if (!isPlayersTurn && enemy.isStunned()) {
-            System.out.println("enemy is skipping turn!");
+            log.append("Противник пропускает ход из-за оглушения!\n");
             enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy()));
             enemy.setStunned(false);
             isPlayersTurn = true;
-            return;
+            log.append("-----------------\n");
+            return log.toString();
         } else {
             ActionType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
-            System.out.println("enemy chose: " + enemyBehaviour);
+            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
 
             switch (enemyBehaviour) {
                 case DEFEND:
                     if (isPlayersTurn){//этот иф верный
                         human.setHealth(human.getHealth() - (int) (enemy.attackEnemy() * 0.5));
                         enemy.defendFromEnemy();
-                        System.out.println("Enemy counter attacked");
+                        log.append("Противник контратаковал!\n");
                         isPlayersTurn = FALSE;
                     } else {
                         human.attackEnemy();
                         enemy.defendFromEnemy();
-                        System.out.println("Player attacked, but enemy blocked");
+                        log.append("Игрок атаковал, но противник заблокировал удар!\n");
                         isPlayersTurn = TRUE;
                     }
                     break;
@@ -75,9 +79,11 @@ public class Fight {
                 case ATTACK:
                     if (isPlayersTurn){
                         enemy.setHealth(enemy.getHealth() - human.attackEnemy());
+                        log.append("Игрок атаковал, противник получил урон!\n");
                         isPlayersTurn = FALSE;
                     } else {
                         human.setHealth(human.getHealth() - enemy.attackEnemy());
+                        log.append("Противник атаковал, игрок получил урон!\n");
                         isPlayersTurn = TRUE;
                     }
                     break;
@@ -90,29 +96,35 @@ public class Fight {
                         enemy.setHealth(enemy.getHealth() - human.attackEnemy()*2);
                         isPlayersTurn = TRUE;
                     }
-                    System.out.println("Enemy received double damage!");
+                    log.append("Противник получил двойной урон!\n");
                     break;
             }
         }
+        log.append("-----------------\n");
+        return log.toString();
     }
 
-    private void processPlayersDefend(Player human, Player enemy) {
+    private String processPlayersDefend(Player human, Player enemy) {
+        StringBuilder log = new StringBuilder();
+        
         if (isPlayersTurn && human.isStunned()) {
-            System.out.println("player is skipping turn!");
+            log.append("Игрок пропускает ход из-за оглушения!\n");
             ActionType enemyBehaviour = ActionType.ATTACK;
-            System.out.println("enemy chose: " + enemyBehaviour);
+            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
             human.setHealth(human.getHealth() - enemy.attackEnemy());
             human.setStunned(false);
             isPlayersTurn = FALSE;
-            return;
+            log.append("-----------------\n");
+            return log.toString();
         } else if (!isPlayersTurn && enemy.isStunned()) {
-            System.out.println("enemy is skipping turn!");
+            log.append("Противник пропускает ход из-за оглушения!\n");
             enemy.setStunned(false);
             isPlayersTurn = true;
-            return;
+            log.append("-----------------\n");
+            return log.toString();
         } else {
             ActionType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
-            System.out.println("enemy chose: " + enemyBehaviour);
+            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
             switch (enemyBehaviour) {
                 case ATTACK:
                     if (isPlayersTurn){
@@ -122,21 +134,21 @@ public class Fight {
                                 human.setHealth(human.getHealth() - (int) (human.attackEnemy() * 0.5));
                                 enemy.attackEnemy();
                                 human.defendFromEnemy();
-                                System.out.println("Shao Kahn broke the block!");
+                                log.append("Shao Kahn прорвал блок и нанес урон!\n");
                             } else {
                                 enemy.attackEnemy();
                                 human.defendFromEnemy();
-                                System.out.println("Enemy attacked, but player blocked");
+                                log.append("Противник атаковал, но игрок заблокировал удар!\n");
                             }
                         } else {
                             enemy.attackEnemy();
                             human.defendFromEnemy();
-                            System.out.println("Enemy attacked, but player blocked");
+                             log.append("Противник атаковал, но игрок заблокировал удар!\n");
                         }
                         isPlayersTurn = FALSE;
                     } else {//этот иф верный
                         enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy() * 0.5));
-                        System.out.println("Player counter attacked");
+                        log.append("Игрок контратаковал!\n");
                         human.defendFromEnemy();
                         isPlayersTurn = TRUE;
                     }
@@ -146,13 +158,13 @@ public class Fight {
                     if (isPlayersTurn){
                         if (Math.random() < 0.5) {//этот иф правильный
                             enemy.setStunned(true); // добавь поле и обработку stun-статуса
-                            System.out.println("enemy is stunned!");
+                            log.append("Противник оглушён!\n");
                         }
                         isPlayersTurn = FALSE;
                     } else {
                         if (Math.random() < 0.5) {//этот иф правильный
                             human.setStunned(true); // добавь поле и обработку stun-статуса
-                            System.out.println("player is stunned!");
+                            log.append("Игрок оглушён!\n");
                         }
                         isPlayersTurn = TRUE;
                     }
@@ -166,10 +178,12 @@ public class Fight {
                         enemy.setHealth((int) (enemy.getHealth() + (enemy.getMaxHealth() - enemy.getHealth()) * 0.5));
                         isPlayersTurn = TRUE;
                     }
-                    System.out.println("Enemy healed!");
+                    log.append("Противник восстановил здоровье!\n");
                     break;
             }
         }
+        log.append("-----------------\n");
+        return log.toString();
     }
     
 }

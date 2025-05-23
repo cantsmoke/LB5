@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-
 /**
  *
  * @author ababa
@@ -34,7 +33,6 @@ public class BattleFrame2 extends JFrame {
     private JLabel turnLabel, playerStunLabel, enemyStunLabel;
     private JLabel playerIconLabel, enemyIconLabel, humanNameLabel, enemyNameLabel;
     
-
     private final Human human;
     private Player enemy;
     private final Game game;
@@ -43,7 +41,6 @@ public class BattleFrame2 extends JFrame {
     private final List<Player> enemyList;
     private int currentEnemyIndex = 0;
     
-
     public BattleFrame2(Human human, List<Player> enemyList, Game game, int currentLocation, int totalLocations) {
         super("Битва");
         this.human = human;
@@ -53,7 +50,6 @@ public class BattleFrame2 extends JFrame {
         this.game = game;
         this.currentLocation = currentLocation;
         this.totalLocations = totalLocations;
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 700);
         setLocationRelativeTo(null);
@@ -79,24 +75,19 @@ public class BattleFrame2 extends JFrame {
     }
 
     private void initializeComponents() {
-        // Top: Заголовок "FIGHT"
         JLabel fightLabel = new JLabel("FIGHT; " + "Location №" + currentLocation, SwingConstants.CENTER);
         fightLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(fightLabel, BorderLayout.NORTH);
 
-        // Слева: Игрок
         JPanel playerPanel = createPlayerPanel(human, true);
         add(playerPanel, BorderLayout.WEST);
 
-        // Справа: Враг
         JPanel enemyPanel = createPlayerPanel(enemy, false);
         add(enemyPanel, BorderLayout.EAST);
 
-        // Центр: очки/опыт, лог, ход, статус
         JPanel centerPanel = createCenterPanel();
         add(centerPanel, BorderLayout.CENTER);
 
-        // Снизу: кнопки действий
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         btnAttack = new JButton("Атаковать");
         btnDefend = new JButton("Защититься");
@@ -106,14 +97,12 @@ public class BattleFrame2 extends JFrame {
         buttonPanel.add(btnItems);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-    
 
     private JPanel createPlayerPanel(Player player, boolean isHuman) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setPreferredSize(new Dimension(150, 0));
 
-        // Прогрессбар HP
         JProgressBar hpBar = new JProgressBar(0, player.getMaxHealth());
         hpBar.setValue(player.getHealth());
         hpBar.setStringPainted(true);
@@ -132,7 +121,6 @@ public class BattleFrame2 extends JFrame {
         panel.add(hpBar);
         panel.add(Box.createVerticalStrut(6));
 
-        // Урон и Уровень
         JLabel lblDamage = new JLabel("Урон: " + player.getDamage());
         JLabel lblLevel = new JLabel("Уровень: " + player.getLevel());
         if(isHuman) {
@@ -146,7 +134,6 @@ public class BattleFrame2 extends JFrame {
         panel.add(lblLevel);
         panel.add(Box.createVerticalStrut(10));
 
-        // Картинка (иконку можешь пока не ставить)
         ImageIcon icon = null;
         if(isHuman) {
             icon = new ImageIcon("C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png");
@@ -166,7 +153,6 @@ public class BattleFrame2 extends JFrame {
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
-        // Очки и опыт
         playerScoreLabel = new JLabel("Очки: " + human.getPoints());
         playerExpLabel = new JLabel("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
         JPanel topRow = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -175,7 +161,6 @@ public class BattleFrame2 extends JFrame {
         topRow.add(playerExpLabel);
         center.add(topRow);
 
-        // Лог событий
         logArea = new JTextArea(7, 24);
         logArea.setEditable(false);
         logArea.setLineWrap(true);
@@ -183,7 +168,6 @@ public class BattleFrame2 extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         center.add(scrollPane);
 
-        // Ход и оглушение
         turnLabel = new JLabel("Ход игрока: " + game.fight.getIsPlayerTurn());
         playerStunLabel = new JLabel("Игрок оглушен: " + human.isStunned());
         enemyStunLabel = new JLabel("Враг оглушен: "+ enemy.isStunned());
@@ -193,7 +177,6 @@ public class BattleFrame2 extends JFrame {
         statusPanel.add(Box.createHorizontalStrut(10));
         statusPanel.add(playerStunLabel);
         statusPanel.add(enemyStunLabel);
-        //statusPanel.add(stunLabel);
         center.add(statusPanel);
 
         return center;
@@ -227,29 +210,28 @@ public class BattleFrame2 extends JFrame {
     }
 
     public void onAttackClicked(ActionEvent e) {
-        System.out.println("Button 'Attack' pressed");
-        game.fight.performPlayerAction(human, enemy, ActionType.ATTACK);
+        String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.ATTACK);
+        logArea.append(battleLog);
+        
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
-        System.out.println("-------------------");
     }
 
-    public void onDefendClicked(ActionEvent e) {
-        System.out.println("Button 'Defend' pressed");
-        game.fight.performPlayerAction(human, enemy, ActionType.DEFEND);
+    public void onDefendClicked(ActionEvent e) {        
+        String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.DEFEND);
+        logArea.append(battleLog);
+        
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
         enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
-        System.out.println("-------------------");
     }
 
     public void onItemsClicked(ActionEvent e) {
-        System.out.println("Button 'Items' pressed.");
         InventoryDialog inventoryDialog = new InventoryDialog(this);
         inventoryDialog.setVisible(true);
     }
@@ -272,13 +254,15 @@ public class BattleFrame2 extends JFrame {
             checkLevelUpdate();
             playerExpLabel.setText("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
             
-            //тут вызвать метод обработки выпадения вещей
             processItemDrop();
+            
+            logArea.setText("");
             
             if (currentEnemyIndex < enemyList.size()) {//надо проверить
                 enemy = enemyList.get(currentEnemyIndex);
                 resetBattle(); // сбросить HP и статус
                 logArea.append("\nСледующий враг: " + enemy.getName() + "\n");
+                logArea.append("-----------------\n");
             } else {
                 WinDialog winDialog = new WinDialog(this);
                 winDialog.setVisible(true);
@@ -308,7 +292,6 @@ public class BattleFrame2 extends JFrame {
             JOptionPane.showMessageDialog(this, "Вам выпал: крест возрождения!");
         }
     }
-
 
     public void checkLevelUpdate(){
         if (human.getExperience() >= human.getRequiredExperiance()){
@@ -346,14 +329,10 @@ public class BattleFrame2 extends JFrame {
                 updateLabels();
             } else {
                 JOptionPane.showMessageDialog(this, "Вы проиграли!");
-                System.out.println("-------------------");
-                System.out.println("Fight restarts");
-                System.out.println("-------------------");
                 resetBattle();
             }
         }
     }
-    
     
     private boolean tryRessurection() {
         if (human.getInventory().getRessurectionCrossCount() > 0) {
@@ -369,8 +348,6 @@ public class BattleFrame2 extends JFrame {
         return false;
     }
 
-
-    
     private void resetBattle() {
         // Сбрасываем здоровье к максимальному
         human.setNewHealth(human.getMaxHealth());
