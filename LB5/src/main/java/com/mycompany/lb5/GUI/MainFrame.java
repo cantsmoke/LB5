@@ -18,6 +18,10 @@ import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 
+    static Object getGame() {
+        return game;
+    }
+
     private JButton btnNewGame;
     private JButton btnShowResults;
     private int selectedLocations = 1; // по умолчанию

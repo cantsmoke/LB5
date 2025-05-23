@@ -9,26 +9,21 @@ package com.mycompany.lb5.GUI;
  * @author Arseniy
  */
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ScoreboardDialog extends JDialog {
 
     private JButton btnClose;
-
-    // Пример данных для таблицы (в реальном приложении можно загружать из файла или БД)
-    private String[][] scoreData = {
-            {"1", "Алекс", "150"},
-            {"2", "Дмитрий", "140"},
-            {"3", "Екатерина", "135"},
-            {"4", "Максим", "130"},
-            {"5", "Ольга", "125"},
-            {"6", "Иван", "120"},
-            {"7", "Наталья", "115"},
-            {"8", "Сергей", "110"},
-            {"9", "Анна", "105"},
-            {"10", "Виктор", "100"}
-    };
+    private JTable table;
 
     private String[] columnNames = {"Место", "Имя", "Результат"};
 
@@ -44,22 +39,25 @@ public class ScoreboardDialog extends JDialog {
     }
 
     private void initializeComponents() {
-        // Создаем таблицу
-        JTable table = new JTable(scoreData, columnNames);
+        List<String[]> scoreDataList = loadTop10TableFromExcel();
+        String[][] scoreData = new String[scoreDataList.size()][3];
+        for (int i = 0; i < scoreDataList.size(); i++) {
+            scoreData[i][0] = String.valueOf(i + 1); // Место
+            scoreData[i][1] = scoreDataList.get(i)[0]; // Имя
+            scoreData[i][2] = scoreDataList.get(i)[1]; // Очки
+        }
+
+        table = new JTable(new DefaultTableModel(scoreData, columnNames));
         table.setFillsViewportHeight(true);
         table.setEnabled(false); // запрещаем редактирование
 
-        // Оборачиваем в JScrollPane для прокрутки
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Кнопка закрытия
         btnClose = new JButton("Закрыть");
 
-        // Панель с кнопкой
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(btnClose);
 
-        // Добавляем компоненты
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -76,10 +74,27 @@ public class ScoreboardDialog extends JDialog {
         System.out.println("Кнопка 'Закрыть' нажата.");
         dispose(); // Закрываем диалог
 
-        // Возвращаемся в главное меню
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
     }
 
+    private List<String[]> loadTop10TableFromExcel() {
+        List<String[]> top10 = new ArrayList<>();
+        try (FileInputStream fis = new FileInputStream("C:\\Users\\Arseniy\\Desktop\\Results.xlsx")) {
+            Workbook workbook = new XSSFWorkbook(fis);
+            Sheet sheet = workbook.getSheetAt(0);
 
+            for (Row row : sheet) {
+                String name = row.getCell(0).getStringCellValue();
+                int score = (int) row.getCell(1).getNumericCellValue();
+                top10.add(new String[]{name, String.valueOf(score)});
+            }
+
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return top10;
+    }
 }

@@ -11,17 +11,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -104,33 +101,6 @@ public class Game {
         Human human = new Human (0,80,100); //пока вместо 16 поставил урон 100 чтобы тестить
         return human;
     }
-
-//    public void EndGameTop(Human human, JTextField text, JTable table) throws IOException {
-//        results.add(new Result(text.getText(), human.getPoints()));
-//        results.sort(Comparator.comparing(Result::getPoints).reversed());
-//        WriteToTable(table);
-//        WriteToExcel();
-//    }
-    
-    /*public void WriteToExcel() throws IOException{
-        XSSFWorkbook book = new XSSFWorkbook();
-        XSSFSheet sheet = book.createSheet("Результаты ТОП 10");
-        XSSFRow r = sheet.createRow(0);
-        r.createCell(0).setCellValue("№");
-        r.createCell(1).setCellValue("Имя");
-        r.createCell(2).setCellValue("Количество баллов");
-        for (int i=0; i<results.size();i++){
-            if (i<10){
-                XSSFRow r2 = sheet.createRow(i+1);
-                r2.createCell(0).setCellValue(i+1);
-                r2.createCell(1).setCellValue(results.get(i).getName());
-                r2.createCell(2).setCellValue(results.get(i).getPoints());
-            }
-        }
-        File f = new File("C:\\Users\\Arseniy\\Desktop\\Results.xlsx");
-        book.write(new FileOutputStream(f));
-        book.close();
-    }*/
     
     public ArrayList<Result> getResults(){
         return this.results;
@@ -247,5 +217,24 @@ public class Game {
         return scores.size() > 10 ? scores.subList(0, 10) : scores;
     }
 
+    public List<String[]> loadTop10TableFromExcel() {
+        List<String[]> top10 = new ArrayList<>();
+        try (FileInputStream fis = new FileInputStream("C:\\Users\\Arseniy\\Desktop\\Results.xlsx")) {
+            Workbook workbook = new XSSFWorkbook(fis);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            for (Row row : sheet) {
+                String name = row.getCell(0).getStringCellValue();
+                int score = (int) row.getCell(1).getNumericCellValue();
+                top10.add(new String[]{name, String.valueOf(score)});
+            }
+
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    return top10;
+}
     
 }
