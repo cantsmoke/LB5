@@ -22,5 +22,20 @@ public class Baraka extends Player{
     public String getIconSource(){
         return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Baraka_in_MK1.png";
     }
+
+    @Override
+    public int getReceivedPoints() {
+        return 110 + level*30;
+    }
+
+    @Override
+    public void addPoints(int p) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int getPoints() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

@@ -188,7 +188,7 @@ public class Fight {
         }
     }
 
-    public void EndRound(Player human, Player enemy, JDialog dialog, JLabel label,
+    /*public void EndRound(Player human, Player enemy, JDialog dialog, JLabel label,
             CharacterAction action, Items[] items) {
 
         dialog.setVisible(true);
@@ -212,9 +212,9 @@ public class Fight {
         k = -1;
         kind_attack = ResetAttack();
 
-    }
+    }*/
 
-    public void EndFinalRound(Human human, CharacterAction action,
+    /*public void EndFinalRound(Human human, CharacterAction action,
             ArrayList<Result> results, JDialog dialog1, JDialog dialog2, JFrame frame,
             JLabel label1, JLabel label2) {
         String text = "Победа не на вашей стороне";
@@ -252,7 +252,7 @@ public class Fight {
     public int[] ResetAttack() {
         int a[] = {0};
         return a;
-    }
+    }*/
 
     public Player NewRound(Player human, JLabel label, JProgressBar pr1,
             JProgressBar pr2, JLabel label2, JLabel text, JLabel label3, CharacterAction action) {

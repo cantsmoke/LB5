@@ -75,6 +75,9 @@ public abstract class Player {
 
     public abstract String getName();
     public abstract String getIconSource();
+    public abstract int getReceivedPoints();
+    public abstract void addPoints(int p);
+    public abstract int getPoints();
     
     public int attackEnemy(){
         playerActionsHistory.add(AttackType.ATTACK);

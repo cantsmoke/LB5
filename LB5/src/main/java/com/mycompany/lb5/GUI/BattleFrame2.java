@@ -156,7 +156,7 @@ public class BattleFrame2 extends JFrame {
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
         // Очки и опыт
-        playerScoreLabel = new JLabel("Очки: " + 50);
+        playerScoreLabel = new JLabel("Очки: " + human.getPoints());
         playerExpLabel = new JLabel("Опыт: " + 10 + "/" + 40);
         JPanel topRow = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topRow.add(playerScoreLabel);
@@ -244,6 +244,7 @@ public class BattleFrame2 extends JFrame {
     private void checkWinCondition() {
         if (enemy.getHealth() <= 0) {
             human.addWin();
+            human.addPoints(enemy.getReceivedPoints());
             System.out.println("Win amount = " + human.getWinAmount());
             WinDialog winDialog = new WinDialog(this);
             winDialog.setVisible(true);

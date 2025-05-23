@@ -153,7 +153,7 @@ public class CharacterAction {
         }
     }
 
-    public void AddPoints(Human human, Player[] enemyes) {
+    /*public void AddPoints(Human human, Player[] enemyes) {
         switch (human.getLevel()) {
             case 0:
                 human.setExperience(20);
@@ -186,9 +186,9 @@ public class CharacterAction {
                 }
             }
         }
-    }
+    }*/
 
-    public void AddPointsBoss(Human human, Player[] enemyes) {
+    /*public void AddPointsBoss(Human human, Player[] enemyes) {
         switch (human.getLevel()) {
             case 2:
                 human.setExperience(30);
@@ -209,7 +209,7 @@ public class CharacterAction {
                 }
             }
         }
-    }
+    }*/
 
     public void AddItems(int k1, int k2, int k3, Items[] items) {
         double i = Math.random();

@@ -22,5 +22,20 @@ public class ShaoKahn extends Player{
     public String getIconSource(){
         return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Шао_Кан_(MK11).png";
     }
+
+    @Override
+    public int getReceivedPoints() {
+        return 250 + level*20;
+    }
+
+    @Override
+    public void addPoints(int p) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int getPoints() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

@@ -40,7 +40,7 @@ public class Human extends Player{
         return this.win;
     }
 
-    public void setPoints(int p){
+    public void addPoints(int p){
         this.points+=p;
     }
     public void setExperience(int e){
@@ -60,6 +60,11 @@ public class Human extends Player{
     
     public String getIconSource(){
         return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png";
+    }
+
+    @Override
+    public int getReceivedPoints() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }
