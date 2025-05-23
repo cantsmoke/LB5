@@ -45,8 +45,8 @@ public abstract class Player {
         return damage;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public void levelUp() {
+        this.level++;
     }
 
     public void setHealth(int health) {
@@ -74,10 +74,10 @@ public abstract class Player {
     }
 
     public abstract String getName();
+    
     public abstract String getIconSource();
+    
     public abstract int getReceivedPoints();
-    public abstract void addPoints(int p);
-    public abstract int getPoints();
     
     public int attackEnemy(){
         playerActionsHistory.add(AttackType.ATTACK);

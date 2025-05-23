@@ -4,6 +4,8 @@
  */
 package com.mycompany.lb5;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Мария
@@ -15,8 +17,6 @@ public class Human extends Player{
     private int experience;
     private int win;
     private int nextexperience;
-    
-    
     
     public Human(int level, int health, int  damage, int attack){
         super (level, health, damage, attack);
@@ -33,7 +33,7 @@ public class Human extends Player{
     public int getExperience(){
         return this.experience;
     }
-    public int getNextExperience(){
+    public int getRequiredExperience(){
         return this.nextexperience;
     }
     public int getWin(){
@@ -43,7 +43,7 @@ public class Human extends Player{
     public void addPoints(int p){
         this.points+=p;
     }
-    public void setExperience(int e){
+    public void gainExperience(int e){
         this.experience+=e;
     }
     public void setNextExperience(int e){
@@ -65,6 +65,14 @@ public class Human extends Player{
     @Override
     public int getReceivedPoints() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public int getRequiredExperiance() {
+        return this.nextexperience;
+    }
+
+    public void setRequiredExperiance() {
+        this.nextexperience = nextexperience + 40;
     }
     
 }

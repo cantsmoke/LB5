@@ -11,6 +11,7 @@ package com.mycompany.lb5.GUI;
 import com.mycompany.lb5.Game;
 import com.mycompany.lb5.Human;
 import com.mycompany.lb5.Player;
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,9 +22,6 @@ public class MainFrame extends JFrame {
     private JButton btnShowResults;
     private int selectedLocations = 1; // по умолчанию
     private static MainFrame instance;
-    /*public static MainFrame getInstance(){
-        return instance;
-    }*/
     
     public static Game game = new Game();
     Human human = null;
@@ -31,7 +29,6 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         super("Игра: Битва героев");
-        //instance = this;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
         setLocationRelativeTo(null); // окно по центру экрана
@@ -56,18 +53,6 @@ public class MainFrame extends JFrame {
         btnNewGame.addActionListener(this::onStartNewGameClicked);
         btnShowResults.addActionListener(this::onShowResultsClicked);
     }
-
-    /*public void onStartNewGameClicked(ActionEvent e) {
-        System.out.println("New game started!");
-        // Пока просто выводим сообщение
-        human = game.NewHuman();
-        enemy = game.NewEnemy();
-        BattleFrame battleFrame = new BattleFrame(human, enemy, game);
-        battleFrame.setVisible(true);
-        setVisible(false);
-        System.out.println("-------------------");
-        //Тут создание нового human и enemy и передача их в battleframe при создании
-    }*/
     
     public void onStartNewGameClicked(ActionEvent e) {
         System.out.println("Новая игра начата!");
@@ -85,11 +70,12 @@ public class MainFrame extends JFrame {
         }
     }
     
-    private void startFirstLocation(Player human, int currentLocation) {
-        Player enemy = game.NewEnemy(); // создаём первого врага
-        BattleFrame2 battleFrame = new BattleFrame2(human, enemy, game, currentLocation, selectedLocations);
+    private void startFirstLocation(Human human, int currentLocation) {
+        List<Player> enemies = game.generateEnemiesForLocation(human.getLevel());
+        BattleFrame2 battleFrame = new BattleFrame2(human, enemies, game, currentLocation, selectedLocations);
         battleFrame.setVisible(true);
     }
+
 
     public void onShowResultsClicked(ActionEvent e) {
         System.out.println("Кнопка 'Посмотреть таблицу результатов' нажата.");

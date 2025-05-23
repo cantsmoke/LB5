@@ -26,7 +26,6 @@ public class WinDialog extends JDialog {
         setLayout(new BorderLayout(10, 10));
 
         initializeComponents();
-        addComponentsToDialog();
         setupActions();
     }
 
@@ -41,23 +40,9 @@ public class WinDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private void addComponentsToDialog() {
-        // Уже добавлено через add()
-    }
-
     private void setupActions() {
         btnNext.addActionListener(this::onNextClicked);
     }
-
-    /*public void onNextClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Далее' нажата.");
-        dispose(); // Закрываем текущий диалог
-        Player human = MainFrame.game.NewHuman();
-        Player enemy = MainFrame.game.NewEnemy();
-        // Открываем новый BattleFrame
-        BattleFrame battleFrame = new BattleFrame(human, enemy, MainFrame.game);
-        battleFrame.setVisible(true);
-    }*/
     
     public void onNextClicked(ActionEvent e) {
         System.out.println("Кнопка 'Далее' нажата.");
@@ -65,7 +50,12 @@ public class WinDialog extends JDialog {
 
         if (parentFrame.getCurrentLocation() < parentFrame.getTotalLocations()) {
             // Перейти к следующей локации
-            BattleFrame2 nextBattle = new BattleFrame2(parentFrame.getHuman(), parentFrame.getGame().NewEnemy(), parentFrame.getGame(), parentFrame.getCurrentLocation() + 1, parentFrame.getTotalLocations());
+            BattleFrame2 nextBattle = new BattleFrame2(
+                    parentFrame.getHuman(), 
+                    parentFrame.getGame().generateEnemiesForLocation(parentFrame.getHuman().getLevel()), 
+                    parentFrame.getGame(), 
+                    parentFrame.getCurrentLocation() + 1, 
+                    parentFrame.getTotalLocations());
             nextBattle.setVisible(true);
         } else {
             // Все локации пройдены

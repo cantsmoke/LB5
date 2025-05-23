@@ -4,11 +4,13 @@
  */
 package com.mycompany.lb5;
 
+import java.util.List;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Random;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
@@ -25,9 +27,28 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class Game {
 
     CharacterAction action = new CharacterAction();
-    ChangeTexts change = new ChangeTexts();
     public Fight fight = new Fight();
     private ArrayList<Result> results = new ArrayList<>();
+    
+    public List<Player> generateEnemiesForLocation(int playerLevel) {
+        List<Player> enemies = new ArrayList<>();
+        
+        int count = playerLevel + 3 +  new Random().nextInt(2);
+        
+        for (int i = 0; i < count - 1; i++) {
+            enemies.add(NewEnemy());
+        }
+
+        Player boss = NewBoss();
+        enemies.add(boss);
+
+        return enemies;
+    }
+
+    public Player NewBoss(){
+        Player boss = action.makeBoss();
+        return boss;
+    }
 
     public Player NewEnemy() {
         action.setEnemies();
@@ -36,7 +57,7 @@ public class Game {
     }
     
     public Human NewHuman(){
-        Human human = new Human (0,80,16,1);
+        Human human = new Human (0,80,100,1); //пока вместо 16 поставил урон 100 чтобы тестить
         return human;
     }
 

@@ -21,16 +21,8 @@ import javax.swing.JRadioButton;
  */
 public class Fight {
 
-    ChangeTexts change = new ChangeTexts();
-    int kind_attack[] = {0};
-    int experiences[] = {40, 90, 180, 260, 410};
-    EnemyFactory fabric = new EnemyFactory();
     Boolean isPlayersTurn = TRUE;
-    //Boolean isEnemyTurn = FALSE;
-    int k = -1;
-    int stun = 0;
-    double v = 0.0;
-    int i;
+
     
     private AttackType getLastPlayerAction(Player human) {
         List<AttackType> history = human.getPlayerActionsHistory();
@@ -188,87 +180,5 @@ public class Fight {
         }
     }
 
-    /*public void EndRound(Player human, Player enemy, JDialog dialog, JLabel label,
-            CharacterAction action, Items[] items) {
 
-        dialog.setVisible(true);
-        dialog.setBounds(300, 150, 700, 600);
-        if (human.getHealth() > 0) {
-            label.setText("You win");
-            ((Human) human).addWin();
-
-            if (enemy instanceof ShaoKahn) {
-                action.AddItems(38, 23, 8, items);
-                action.AddPointsBoss(((Human) human), action.getEnemyes());
-            } else {
-                action.AddItems(25, 15, 5, items);
-                action.AddPoints(((Human) human), action.getEnemyes());
-            }
-        } else {
-            label.setText(enemy.getName() + " win");
-        }
-
-        isPlayersTurn = TRUE;
-        k = -1;
-        kind_attack = ResetAttack();
-
-    }*/
-
-    /*public void EndFinalRound(Human human, CharacterAction action,
-            ArrayList<Result> results, JDialog dialog1, JDialog dialog2, JFrame frame,
-            JLabel label1, JLabel label2) {
-        String text = "Победа не на вашей стороне";
-        if (human.getHealth() > 0) {
-            human.addWin();
-            action.AddPoints(human, action.getEnemyes());
-            text = "Победа на вашей стороне";
-        }
-        boolean top = false;
-        if (results == null) {
-            top = true;
-        } else {
-            int i = 0;
-            for (int j = 0; j < results.size(); j++) {
-                if (human.getPoints() < results.get(j).getPoints()) {
-                    i++;
-                }
-            }
-            if (i < 10) {
-                top = true;
-            }
-        }
-        if (top) {
-            dialog1.setVisible(true);
-            dialog1.setBounds(150, 150, 600, 500);
-            label1.setText(text);
-        } else {
-            dialog2.setVisible(true);
-            dialog2.setBounds(150, 150, 470, 360);
-            label2.setText(text);
-        }
-        frame.dispose();
-    }
-
-    public int[] ResetAttack() {
-        int a[] = {0};
-        return a;
-    }*/
-
-    public Player NewRound(Player human, JLabel label, JProgressBar pr1,
-            JProgressBar pr2, JLabel label2, JLabel text, JLabel label3, CharacterAction action) {
-
-        Player enemy1 = null;
-        if (((Human) human).getWin() == 6 | ((Human) human).getWin() == 11) {
-            enemy1 = action.ChooseBoss(label, label2, text, label3, human.getLevel());
-        } else {
-            enemy1 = action.ChooseEnemy(/*label, label2, text, label3*/);
-        }
-        pr1.setMaximum(human.getMaxHealth());
-        pr2.setMaximum(enemy1.getMaxHealth());
-        human.setNewHealth(human.getMaxHealth());
-        enemy1.setNewHealth(enemy1.getMaxHealth());
-        action.HP(human, pr1);
-        action.HP(enemy1, pr2);
-        return enemy1;
-    }
 }

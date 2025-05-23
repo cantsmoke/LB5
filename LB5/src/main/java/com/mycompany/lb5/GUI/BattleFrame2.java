@@ -11,8 +11,10 @@ package com.mycompany.lb5.GUI;
 import com.mycompany.lb5.AttackType;
 import com.mycompany.lb5.Game;
 import com.mycompany.lb5.Player;
+import com.mycompany.lb5.Human;
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class BattleFrame2 extends JFrame {
@@ -26,20 +28,24 @@ public class BattleFrame2 extends JFrame {
     private JLabel playerScoreLabel, playerExpLabel;
     private JTextArea logArea;
     private JLabel turnLabel, playerStunLabel, enemyStunLabel;
+    private JLabel playerIconLabel, enemyIconLabel, humanNameLabel, enemyNameLabel;
     
 
-    private final Player human;
-    private final Player enemy;
+    private final Human human;
+    private Player enemy;
     private final Game game;
     private final int currentLocation;
     private final int totalLocations;
+    private final List<Player> enemyList;
+    private int currentEnemyIndex = 0;
     
 
-    public BattleFrame2(Player human, Player enemy, Game game, int currentLocation, int totalLocations) {
+    public BattleFrame2(Human human, List<Player> enemyList, Game game, int currentLocation, int totalLocations) {
         super("Битва");
         this.human = human;
         human.setHealth(human.getMaxHealth());
-        this.enemy = enemy;
+        this.enemyList = enemyList;
+        this.enemy = enemyList.get(0);
         this.game = game;
         this.currentLocation = currentLocation;
         this.totalLocations = totalLocations;
@@ -49,7 +55,6 @@ public class BattleFrame2 extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
         initializeComponents();
-        addComponentsToFrame();
         setupActions();
     }
     
@@ -61,7 +66,7 @@ public class BattleFrame2 extends JFrame {
         return this.totalLocations;
     }
     
-    public Player getHuman(){
+    public Human getHuman(){
         return this.human;
     }
     
@@ -71,7 +76,7 @@ public class BattleFrame2 extends JFrame {
 
     private void initializeComponents() {
         // Top: Заголовок "FIGHT"
-        JLabel fightLabel = new JLabel("FIGHT", SwingConstants.CENTER);
+        JLabel fightLabel = new JLabel("FIGHT; " + "Location №" + currentLocation, SwingConstants.CENTER);
         fightLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(fightLabel, BorderLayout.NORTH);
 
@@ -112,8 +117,14 @@ public class BattleFrame2 extends JFrame {
         if(isHuman) playerHpBar = hpBar;
         else enemyHpBar = hpBar;
         hpBar.setForeground(Color.GREEN);
-
-        panel.add(new JLabel(isHuman ? "Игрок " + player.getName() : "Враг " + player.getName(), SwingConstants.CENTER));
+        
+        if(isHuman) {
+            humanNameLabel = new JLabel("Игрок " + player.getName(), SwingConstants.CENTER);
+            panel.add(humanNameLabel);
+        } else {
+            enemyNameLabel = new JLabel("Враг " + player.getName(), SwingConstants.CENTER);
+            panel.add(enemyNameLabel);
+        }
         panel.add(hpBar);
         panel.add(Box.createVerticalStrut(6));
 
@@ -135,17 +146,13 @@ public class BattleFrame2 extends JFrame {
         ImageIcon icon = null;
         if(isHuman) {
             icon = new ImageIcon("C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png");
+            playerIconLabel = new JLabel("Текст", icon, JLabel.CENTER);
+            panel.add(playerIconLabel);
         } else {
             icon = new ImageIcon(player.getIconSource());
+            enemyIconLabel = new JLabel("Текст", icon, JLabel.CENTER);
+            panel.add(enemyIconLabel);
         }
-        JLabel picLabel = new JLabel("Текст", icon, JLabel.CENTER);
-        panel.add(picLabel);
-
-        // Имя
-//        JLabel lblName = new JLabel(player.getName() + (isHuman ? " (вы)" : " (враг)"), SwingConstants.CENTER);
-//        lblName.setFont(new Font("Arial", Font.BOLD, 13));
-//        if(isHuman) lblPlayerName = lblName; else lblEnemyName = lblName;
-//        panel.add(lblName);
 
         panel.add(Box.createVerticalGlue());
         return panel;
@@ -157,7 +164,7 @@ public class BattleFrame2 extends JFrame {
 
         // Очки и опыт
         playerScoreLabel = new JLabel("Очки: " + human.getPoints());
-        playerExpLabel = new JLabel("Опыт: " + 10 + "/" + 40);
+        playerExpLabel = new JLabel("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
         JPanel topRow = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topRow.add(playerScoreLabel);
         topRow.add(Box.createHorizontalStrut(16));
@@ -186,10 +193,6 @@ public class BattleFrame2 extends JFrame {
         center.add(statusPanel);
 
         return center;
-    }
-    
-    private void addComponentsToFrame() {
-        // Уже добавлено через add() в initializeComponents()
     }
 
     private void setupActions() {
@@ -240,27 +243,69 @@ public class BattleFrame2 extends JFrame {
         InventoryDialog inventoryDialog = new InventoryDialog(this);
         inventoryDialog.setVisible(true);
     }
-
+    
     private void checkWinCondition() {
         if (enemy.getHealth() <= 0) {
             human.addWin();
             human.addPoints(enemy.getReceivedPoints());
-            System.out.println("Win amount = " + human.getWinAmount());
-            WinDialog winDialog = new WinDialog(this);
-            winDialog.setVisible(true);
-            setVisible(false);
+            currentEnemyIndex++;
+            
+            int defeatedNumber = currentEnemyIndex; // т.к. индекс увеличили
+            int totalEnemies = enemyList.size();
+            JOptionPane.showMessageDialog(this, 
+                "Побежден враг " + defeatedNumber + " из " + totalEnemies + "!",
+                "Победа!", 
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            human.gainExperience(20); //надо поменять чтобы от врага зависело кол-во получаемого опыта
+            checkLevelUpdate();
+            playerExpLabel.setText("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
+            
+            if (currentEnemyIndex < enemyList.size()) {//надо проверить
+                enemy = enemyList.get(currentEnemyIndex);
+                resetBattle(); // сбросить HP и статус
+                logArea.append("\nСледующий враг: " + enemy.getName() + "\n");
+            } else {
+                WinDialog winDialog = new WinDialog(this);
+                winDialog.setVisible(true);
+                setVisible(false);
+            }
+        }
+    }
+
+    public void checkLevelUpdate(){
+        if (human.getExperience() >= human.getRequiredExperiance()){
+            human.levelUp();
+            showLevelUpDialog();
+            human.setRequiredExperiance();
+        }
+    }
+    
+    private void showLevelUpDialog() {
+        Object[] options = {"Увеличить урон (+20%)", "Увеличить здоровье (+15%)"};
+        int choice = JOptionPane.showOptionDialog(null,
+                "Вы достигли уровня " + human.getLevel() + "! Выберите улучшение:",
+                "Повышение уровня",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        if (choice == 0) {
+            human.setDamage((int) (human.getDamage() + human.getDamage()*0.2));
+        } else if (choice == 1) {
+            enemy.setMaxHealth((int) (human.getMaxHealth() + human.getMaxHealth()*0.25));
         }
     }
 
     private void checkLoseCondition() {
         if (human.getHealth() <= 0) {
             JOptionPane.showMessageDialog(this, "Вы проиграли!");
-            //логика начала боя заново с тем же врагом
             System.out.println("-------------------");
             System.out.println("Fight restarts");
             System.out.println("-------------------");
             resetBattle();
-            //dispose(); // Закрыть окно боя
         }
     }
     
@@ -272,8 +317,20 @@ public class BattleFrame2 extends JFrame {
         // Очищаем статусы, если есть
         human.resetStatus(); // например, isStunned = false;
         enemy.resetStatus();
+        
+        playerIconLabel.setIcon(new ImageIcon(human.getIconSource()));
+        enemyIconLabel.setIcon(new ImageIcon(enemy.getIconSource()));
+        
+        playerScoreLabel.setText("Очки: " + human.getPoints());
+        
+        enemyNameLabel.setText("Враг " + enemy.getName());
+        
+        enemyHpBar.setMaximum(enemy.getMaxHealth());
 
         updateHealthLabels();
+        
+        playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
+        enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
         
         playerHpBar.setForeground(Color.GREEN);
         enemyHpBar.setForeground(Color.GREEN);

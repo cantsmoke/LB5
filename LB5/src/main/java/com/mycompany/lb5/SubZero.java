@@ -27,15 +27,5 @@ public class SubZero extends Player{
     public int getReceivedPoints() {
         return 100 + level*50;
     }
-
-    @Override
-    public void addPoints(int p) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int getPoints() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     
 }
