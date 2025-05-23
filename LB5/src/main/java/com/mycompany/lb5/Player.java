@@ -19,7 +19,7 @@ public abstract class Player {
     protected int attack;
     protected int winAmount;
     
-    ArrayList<AttackType> playerActionsHistory = new ArrayList<>();
+    ArrayList<ActionType> playerActionsHistory = new ArrayList<>();
 
     public Player(int level, int health, int damage) {
         this.level = level;
@@ -84,18 +84,18 @@ public abstract class Player {
     public abstract int getReceivedPoints();
     
     public int attackEnemy(){
-        playerActionsHistory.add(AttackType.ATTACK);
+        playerActionsHistory.add(ActionType.ATTACK);
         return this.damage;
     }
     
     public void defendFromEnemy(){
-        playerActionsHistory.add(AttackType.DEFEND);
+        playerActionsHistory.add(ActionType.DEFEND);
     }
     
     public int getAttackCount() {
         int attackCount = 0;
-        for (AttackType action : playerActionsHistory) {
-            if (action == AttackType.ATTACK) {
+        for (ActionType action : playerActionsHistory) {
+            if (action == ActionType.ATTACK) {
                 attackCount++;
             }
         }
@@ -104,8 +104,8 @@ public abstract class Player {
 
     public int getDefendCount() {
         int defendCount = 0;
-        for (AttackType action : playerActionsHistory) {
-            if (action == AttackType.DEFEND) {
+        for (ActionType action : playerActionsHistory) {
+            if (action == ActionType.DEFEND) {
                 defendCount++;
             }
         }
@@ -126,7 +126,7 @@ public abstract class Player {
         this.stunned = false;
     }
 
-    public List<AttackType> getPlayerActionsHistory() {
+    public List<ActionType> getPlayerActionsHistory() {
         return this.playerActionsHistory;
     }
     

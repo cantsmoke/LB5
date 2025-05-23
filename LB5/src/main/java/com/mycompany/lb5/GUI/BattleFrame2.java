@@ -8,10 +8,11 @@ package com.mycompany.lb5.GUI;
  *
  * @author ababa
  */
-import com.mycompany.lb5.AttackType;
+import com.mycompany.lb5.ActionType;
 import com.mycompany.lb5.BigHealthPotion;
 import com.mycompany.lb5.Game;
 import com.mycompany.lb5.Player;
+import com.mycompany.lb5.ShaoKahn;
 import com.mycompany.lb5.Human;
 import com.mycompany.lb5.RessurectionCross;
 import com.mycompany.lb5.SmallHealthPotion;
@@ -227,7 +228,7 @@ public class BattleFrame2 extends JFrame {
 
     public void onAttackClicked(ActionEvent e) {
         System.out.println("Button 'Attack' pressed");
-        game.fight.performPlayerAction(human, enemy, AttackType.ATTACK);
+        game.fight.performPlayerAction(human, enemy, ActionType.ATTACK);
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
@@ -237,7 +238,7 @@ public class BattleFrame2 extends JFrame {
 
     public void onDefendClicked(ActionEvent e) {
         System.out.println("Button 'Defend' pressed");
-        game.fight.performPlayerAction(human, enemy, AttackType.DEFEND);
+        game.fight.performPlayerAction(human, enemy, ActionType.DEFEND);
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
@@ -290,14 +291,19 @@ public class BattleFrame2 extends JFrame {
         double smallPotionDropP = Math.random();
         double bigPotionDropP = Math.random();
         double ressurectionCrossDropP = Math.random();
+        
+        double probabilityMultiplier = 1;
+        if (enemy instanceof ShaoKahn){
+            probabilityMultiplier = 1.5;
+        }
 
-        if (smallPotionDropP < 0.25) {
+        if (smallPotionDropP < 0.25 * probabilityMultiplier) {
             human.getInventory().addSmallHealthPotion(new SmallHealthPotion());
             JOptionPane.showMessageDialog(this, "Вам выпало: малое зелье лечения!");
-        } else if (bigPotionDropP < 0.15) {
+        } else if (bigPotionDropP < 0.15 * probabilityMultiplier) {
             human.getInventory().addBigHealthPotion(new BigHealthPotion());
             JOptionPane.showMessageDialog(this, "Вам выпало: большое зелье лечения!");
-        } else if (ressurectionCrossDropP < 0.50) {
+        } else if (ressurectionCrossDropP < 0.05 * probabilityMultiplier) {
             human.getInventory().addRessurectionCross(new RessurectionCross());
             JOptionPane.showMessageDialog(this, "Вам выпал: крест возрождения!");
         }

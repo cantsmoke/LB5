@@ -7,14 +7,7 @@ package com.mycompany.lb5;
 //ADD IMAGE!!!
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-
 /**
  *
 * @author Мария
@@ -24,9 +17,9 @@ public class Fight {
     Boolean isPlayersTurn = TRUE;
 
     
-    private AttackType getLastPlayerAction(Player human) {
-        List<AttackType> history = human.getPlayerActionsHistory();
-        if (history.isEmpty()) return AttackType.DEFEND; // По умолчанию
+    private ActionType getLastPlayerAction(Player human) {
+        List<ActionType> history = human.getPlayerActionsHistory();
+        if (history.isEmpty()) return ActionType.DEFEND; // По умолчанию
         return history.get(history.size() - 1);
     }
     
@@ -35,7 +28,7 @@ public class Fight {
     }
 
 
-    public void performPlayerAction(Player human, Player enemy, AttackType action) {
+    public void performPlayerAction(Player human, Player enemy, ActionType action) {
         System.out.println("player is first to perform action: " + isPlayersTurn);
         switch (action) {
             case ATTACK -> processPlayersAttack(human, enemy);
@@ -43,67 +36,46 @@ public class Fight {
             default -> throw new IllegalArgumentException("Такого типа соперника нет: " + action);
         }
     }
-    
-    
-    //Если игрок в стане - то тогда враг либо просто наносит ему урон, либо враг не делает ничего в случае защиты
-    //Если враг в стане - то тогда игрок либо наносит ему урон, либо ничего ему не делает при варианте защиты
-    //в этих двух методах надо вынести первые два if'а в отдельный метод, делающий проверку на оглушение
-    //Это надо учесть -	Оглушение пользователя известно только в результате следующего хода, т.е. игрок так же выбирает защиту или атаку, но действие не проходит.
-    
+
     private void processPlayersAttack(Player human, Player enemy) {
-        if (isPlayersTurn && human.isStunned()) { //если ход игрока и игрок в стане - то враг либо атакует либо защищается
-                                                  //Наверно лучше сделать так, чтобы он атаковал всегда
+        if (isPlayersTurn && human.isStunned()) {
             System.out.println("player is skipping turn!");
-            AttackType enemyBehaviour = AttackType.ATTACK;
+            ActionType enemyBehaviour = ActionType.ATTACK;
             System.out.println("enemy chose: " + enemyBehaviour);
             human.setHealth(human.getHealth() - enemy.attackEnemy());
-            /*AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
-            System.out.println("enemy chose: " + enemyBehaviour);
-            switch (enemyBehaviour) {
-                case DEFEND -> enemy.defendFromEnemy();
-                case ATTACK -> human.setHealth(human.getHealth() - enemy.attackEnemy());
-            }*/
             human.setStunned(false);
             isPlayersTurn = FALSE;
             return;
-        } else if (!isPlayersTurn && enemy.isStunned()) { //если ход врага и он пропускате ход из за стана - то игрок 
-                                                            //только атакует его тк метод обрабатывает именно атаку игрока
+        } else if (!isPlayersTurn && enemy.isStunned()) {
             System.out.println("enemy is skipping turn!");
-            AttackType humanBehaviour = AttackType.ATTACK;//оно задается но не используется в методе
             enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy()));
             enemy.setStunned(false);
             isPlayersTurn = true;
             return;
-        } else { //никто не в стане и все делают последовательно свои шаги
-            AttackType humanBehaviour = AttackType.ATTACK;//оно задается но не используется в методе
-            AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
+        } else {
+            ActionType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
             System.out.println("enemy chose: " + enemyBehaviour);
-            switch (enemyBehaviour) {
 
+            switch (enemyBehaviour) {
                 case DEFEND:
-                    // Контрудар — 50% урона врага
-                    //добавить логику хода игрока или врага
                     if (isPlayersTurn){//этот иф верный
                         human.setHealth(human.getHealth() - (int) (enemy.attackEnemy() * 0.5));
                         enemy.defendFromEnemy();
                         System.out.println("Enemy counter attacked");
                         isPlayersTurn = FALSE;
-                    } else {//этот иф неверный т.к. по идее не происходит ничего "защита – атака происходит ничего" - отредактировал это
-                        //enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy() * 0.5));
-                        human.attackEnemy(); //просто два счетчика для отслеживания действий игроков
-                        human.defendFromEnemy();
+                    } else {
+                        human.attackEnemy();
+                        enemy.defendFromEnemy();
                         System.out.println("Player attacked, but enemy blocked");
                         isPlayersTurn = TRUE;
                     }
                     break;
 
                 case ATTACK:
-                    // Обычная атака — урон от игрока
-                    //добавить логику хода игрока или врага
-                    if (isPlayersTurn){// этот иф верный
+                    if (isPlayersTurn){
                         enemy.setHealth(enemy.getHealth() - human.attackEnemy());
                         isPlayersTurn = FALSE;
-                    } else {// этот иф верный
+                    } else {
                         human.setHealth(human.getHealth() - enemy.attackEnemy());
                         isPlayersTurn = TRUE;
                     }
@@ -113,43 +85,43 @@ public class Fight {
     }
 
     private void processPlayersDefend(Player human, Player enemy) {
-        if (isPlayersTurn && human.isStunned()) { //если ход игрока и игрок в стане - то враг либо атакует либо защищается
-                                                  //Наверно лучше сделать так, чтобы он атаковал всегда
+        if (isPlayersTurn && human.isStunned()) {
             System.out.println("player is skipping turn!");
-            AttackType enemyBehaviour = AttackType.ATTACK;
+            ActionType enemyBehaviour = ActionType.ATTACK;
             System.out.println("enemy chose: " + enemyBehaviour);
             human.setHealth(human.getHealth() - enemy.attackEnemy());
-            /*System.out.println("player is skipping turn!");
-            AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
-            System.out.println("enemy chose: " + enemyBehaviour);
-            switch (enemyBehaviour) {
-                case DEFEND -> enemy.defendFromEnemy();
-                case ATTACK -> human.setHealth(human.getHealth() - enemy.attackEnemy());
-            }*/
             human.setStunned(false);
             isPlayersTurn = FALSE;
             return;
-        } else if (!isPlayersTurn && enemy.isStunned()) { //если ход врага и он пропускате ход из за стана - то игрок 
-                                                            //только атакует его тк метод обрабатывает именно атаку игрока
+        } else if (!isPlayersTurn && enemy.isStunned()) {
             System.out.println("enemy is skipping turn!");
-            AttackType humanBehaviour = AttackType.ATTACK;//оно задается но не используется в методе
             enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy()));
             enemy.setStunned(false);
             isPlayersTurn = true;
             return;
         } else {
-            AttackType humanBehaviour = AttackType.DEFEND;
-            AttackType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
+            ActionType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
             System.out.println("enemy chose: " + enemyBehaviour);
             switch (enemyBehaviour) {
                 case ATTACK:
-                    // Игрок защищается — ничего не происходит
-                    //добавить логику хода игрока или врага
-                    if (isPlayersTurn){//этот иф неверный т.к. по идее не происходит ничего "защита – атака происходит ничего" - отредактировал это
-                        //human.setHealth(human.getHealth() - (int) (enemy.attackEnemy() * 0.5));
-                        enemy.attackEnemy();
-                        enemy.defendFromEnemy();
-                        System.out.println("Enemy attacked, but player blocked");
+                    if (isPlayersTurn){
+                        if(enemy instanceof ShaoKahn){
+                            double breakingBlockP = Math.random();
+                            if(breakingBlockP < 0.15){
+                                human.setHealth(human.getHealth() - (int) (human.attackEnemy() * 0.5));
+                                enemy.attackEnemy();
+                                human.defendFromEnemy();
+                                System.out.println("Shao Kahn broke the block!");
+                            } else {
+                                enemy.attackEnemy();
+                                human.defendFromEnemy();
+                                System.out.println("Enemy attacked, but player blocked");
+                            }
+                        } else {
+                            enemy.attackEnemy();
+                            human.defendFromEnemy();
+                            System.out.println("Enemy attacked, but player blocked");
+                        }
                         isPlayersTurn = FALSE;
                     } else {//этот иф верный
                         enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy() * 0.5));
@@ -160,8 +132,6 @@ public class Fight {
                     break;
 
                 case DEFEND:
-                    // Оба защищаются — шанс оглушения врага
-                    //добавить логику хода игрока или врага
                     if (isPlayersTurn){
                         if (Math.random() < 0.5) {//этот иф правильный
                             enemy.setStunned(true); // добавь поле и обработку stun-статуса
@@ -179,6 +149,5 @@ public class Fight {
             }
         }
     }
-
-
+    
 }

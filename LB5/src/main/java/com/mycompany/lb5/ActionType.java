@@ -8,7 +8,8 @@ package com.mycompany.lb5;
  *
  * @author Arseniy
  */
-public enum AttackType {
+public enum ActionType {
     ATTACK,
-    DEFEND
+    DEFEND,
+    HEAL
 }

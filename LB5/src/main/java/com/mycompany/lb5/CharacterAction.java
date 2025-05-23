@@ -9,14 +9,14 @@ package com.mycompany.lb5;
  */
 public class CharacterAction {
     
-    public static AttackType adaptiveBehaviourChooser(int attackProbability, int defendProbability, Player human){
+    public static ActionType adaptiveBehaviourChooser(int attackProbability, int defendProbability, Player human){
         int attackCount = human.getAttackCount();
         int defendCount = human.getDefendCount();
         int total = attackCount + defendCount;
 
         // Если данных ещё недостаточно, выбираем на основе базовых вероятностей
         if (total < 15) {
-            return Math.random() < attackProbability / 100.0 ? AttackType.ATTACK : AttackType.DEFEND;
+            return Math.random() < attackProbability / 100.0 ? ActionType.ATTACK : ActionType.DEFEND;
         } else{
             // Вычисляем склонность игрока
             double playerAggression = (double) attackCount / total;
@@ -31,12 +31,12 @@ public class CharacterAction {
             int totalAdjusted = adjustedAttackProb + adjustedDefendProb;
             double normAttack = (double) adjustedAttackProb / totalAdjusted;
 
-            return Math.random() < normAttack ? AttackType.ATTACK : AttackType.DEFEND;
+            return Math.random() < normAttack ? ActionType.ATTACK : ActionType.DEFEND;
         }
     }
 
-    public static AttackType ChooseEnemyBehavior(Player human, Player enemy) {
-        AttackType enemyAction = null;
+    public static ActionType ChooseEnemyBehavior(Player human, Player enemy) {
+        ActionType enemyAction = null;
         if (enemy instanceof Baraka) {
             enemyAction = adaptiveBehaviourChooser(30, 70, human);
         }
