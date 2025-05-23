@@ -33,6 +33,11 @@ public class Game {
         
         setEnemies();
         
+        //тут в зависимости от уровня игрока меняются хар-ки врагов
+        for(Player enemy: enemies){
+            enemy.updateCharacteristicsBasedOnLevel(playerLevel);
+        }
+        
         List<Player> enemies = new ArrayList<>();
         
         int count = playerLevel + 3 +  new Random().nextInt(2);
@@ -89,7 +94,7 @@ public class Game {
     }
     
     public Human NewHuman(){
-        Human human = new Human (0,80,100,1); //пока вместо 16 поставил урон 100 чтобы тестить
+        Human human = new Human (0,80,100); //пока вместо 16 поставил урон 100 чтобы тестить
         return human;
     }
 

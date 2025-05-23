@@ -21,7 +21,7 @@ public abstract class Player {
     
     ArrayList<AttackType> playerActionsHistory = new ArrayList<>();
 
-    public Player(int level, int health, int damage, int attack) {
+    public Player(int level, int health, int damage) {
         this.level = level;
         this.health = health;
         this.maxHealth = health;
@@ -136,4 +136,6 @@ public abstract class Player {
     
     public abstract int returnExperienceForWin();
 
+    public abstract void updateCharacteristicsBasedOnLevel(int playerLevel);
+    
 }

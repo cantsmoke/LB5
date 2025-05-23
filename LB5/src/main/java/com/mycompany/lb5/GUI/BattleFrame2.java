@@ -281,6 +281,9 @@ public class BattleFrame2 extends JFrame {
             human.levelUp();
             showLevelUpDialog();
             human.setRequiredExperiance(); //добавить изменение хар-ик врагов
+            for(Player enemy: enemyList){
+                enemy.updateCharacteristicsBasedOnLevel(human.getLevel());
+            }
         }
     }
     

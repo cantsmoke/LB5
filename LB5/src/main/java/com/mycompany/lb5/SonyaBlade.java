@@ -10,8 +10,8 @@ package com.mycompany.lb5;
  */
 public class SonyaBlade extends Player{
     
-    public SonyaBlade (int level, int health, int  damage, int attack){
-        super (level, health, damage, attack);
+    public SonyaBlade (int level, int health, int  damage){
+        super (level, health, damage);
     }
     
     @Override
@@ -31,6 +31,13 @@ public class SonyaBlade extends Player{
     @Override
     public int returnExperienceForWin() {
         return 20;
+    }
+    
+    @Override
+    public void updateCharacteristicsBasedOnLevel(int playerLevel) {
+        this.level = playerLevel;
+        this.health = 80 + (playerLevel) * 15;
+        this.damage = 16 + (playerLevel) * 15;
     }
     
 }

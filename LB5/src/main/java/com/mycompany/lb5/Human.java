@@ -18,8 +18,8 @@ public class Human extends Player{
     private int win;
     private int nextexperience;
     
-    public Human(int level, int health, int  damage, int attack){
-        super (level, health, damage, attack);
+    public Human(int level, int health, int  damage){
+        super (level, health, damage);
         this.points=0;
         this.experience=0;
         this.nextexperience=40;
@@ -77,6 +77,11 @@ public class Human extends Player{
 
     @Override
     public int returnExperienceForWin() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

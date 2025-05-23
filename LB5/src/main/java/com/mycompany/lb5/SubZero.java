@@ -10,8 +10,8 @@ package com.mycompany.lb5;
  */
 public class SubZero extends Player{
     
-    public SubZero(int level, int health, int damage , int attack){
-        super (level, health, damage, attack);
+    public SubZero(int level, int health, int damage){
+        super (level, health, damage);
     }
     
     @Override
@@ -31,6 +31,13 @@ public class SubZero extends Player{
     @Override
     public int returnExperienceForWin() {
         return 20;
+    }
+
+    @Override
+    public void updateCharacteristicsBasedOnLevel(int playerLevel) {
+        this.level = playerLevel;
+        this.health = 60 + (playerLevel) * 15;
+        this.damage = 16 + (playerLevel) * 10;
     }
     
 }

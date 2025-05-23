@@ -10,8 +10,8 @@ package com.mycompany.lb5;
  */
 public class ShaoKahn extends Player{
     
-    public ShaoKahn(int level, int health, int  damage, int attack){
-        super (level, health, damage, attack);
+    public ShaoKahn(int level, int health, int  damage){
+        super (level, health, damage);
     }
     
     @Override
@@ -31,6 +31,13 @@ public class ShaoKahn extends Player{
     @Override
     public int returnExperienceForWin() {
         return 40;
+    }
+    
+    @Override
+    public void updateCharacteristicsBasedOnLevel(int playerLevel) {
+        this.level = playerLevel + 2;
+        this.health = 145 + (playerLevel) * 20;
+        this.damage = 44 + (playerLevel) * 15;
     }
     
 }
