@@ -8,21 +8,13 @@ package com.mycompany.lb5;
 import static com.mycompany.lb5.ActionType.HEAL;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
-import java.util.List;
 /**
  *
 * @author Мария
  */
 public class Fight {
 
-    Boolean isPlayersTurn = TRUE;
-
-    
-    private ActionType getLastPlayerAction(Player human) {
-        List<ActionType> history = human.getPlayerActionsHistory();
-        if (history.isEmpty()) return ActionType.DEFEND; // По умолчанию
-        return history.get(history.size() - 1);
-    }
+    Boolean isPlayersTurn = TRUE; 
     
     public boolean getIsPlayerTurn(){
         return this.isPlayersTurn;

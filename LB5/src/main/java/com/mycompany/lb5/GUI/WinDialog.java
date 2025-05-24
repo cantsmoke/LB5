@@ -8,12 +8,11 @@ package com.mycompany.lb5.GUI;
  *
  * @author Arseniy
  */
-import com.mycompany.lb5.Player;
+import com.mycompany.lb5.ExcelManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Collections;
 
 
@@ -82,7 +81,7 @@ public class WinDialog extends JDialog {
                 if (option == JOptionPane.OK_OPTION) {
                     String playerName = nameField.getText().trim();
                     if (!playerName.isEmpty()) {
-                        parentFrame.getGame().writeToExcel(playerName, playerScore); // вызов без реализации
+                        ExcelManager.writeToExcel(playerName, playerScore); // вызов без реализации
                         JOptionPane.showMessageDialog(null, "Результат сохранён! Спасибо за игру!");
                     } else {
                         JOptionPane.showMessageDialog(null, "Имя не введено. Результат не сохранён.");
@@ -97,7 +96,7 @@ public class WinDialog extends JDialog {
     }
     
     private int getTop10Position(int playerScore) { //требует проверки
-        List<Integer> topScores = parentFrame.getGame().loadTop10ScoresFromExcel(); // уже сортированы по убыванию
+        List<Integer> topScores = ExcelManager.loadTop10ScoresFromExcel(); // уже сортированы по убыванию
         int position = 0; // -1 если не попал в топ-10
 
         if (playerScore > getMin(topScores)){

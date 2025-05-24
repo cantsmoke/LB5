@@ -19,6 +19,7 @@ public class SonyaBlade extends Player{
         return "Sonya Blade";
     }
     
+    @Override
     public String getIconSource(){
         return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Соня_(MK11).png";
     }

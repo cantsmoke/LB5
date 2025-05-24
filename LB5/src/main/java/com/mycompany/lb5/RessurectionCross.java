@@ -14,5 +14,10 @@ public class RessurectionCross implements Item{
     public String getName() {
         return "Крест воскрешения";
     }
+
+    @Override
+    public double getHealKF() {
+        return 0.05;
+    }
     
 }

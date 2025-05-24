@@ -25,11 +25,9 @@ public class MainFrame extends JFrame {
     private JButton btnNewGame;
     private JButton btnShowResults;
     private int selectedLocations = 1; // по умолчанию
-    private static MainFrame instance;
     
     public static Game game = new Game();
     Human human = null;
-    Player enemy = null;
 
     public MainFrame() {
         super("Игра: Битва героев");

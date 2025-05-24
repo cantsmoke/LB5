@@ -65,6 +65,7 @@ public class Human extends Player{
         return "Kitana";
     }
     
+    @Override
     public String getIconSource(){
         return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png";
     }

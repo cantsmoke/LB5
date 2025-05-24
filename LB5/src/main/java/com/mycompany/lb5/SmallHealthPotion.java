@@ -14,5 +14,10 @@ public class SmallHealthPotion implements Item{
     public String getName() {
         return "Малое зелье лечения";
     }
+
+    @Override
+    public double getHealKF() {
+        return 0.25;
+    }
     
 }

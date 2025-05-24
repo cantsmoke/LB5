@@ -80,8 +80,8 @@ public class InventoryDialog extends JDialog {
         switch (itemType) {
             case "Большое зелье лечения":
                 if (inventory.getBigHealthPotionCount() > 0) {
-                    BigHealthPotion potion = inventory.getBigHealthPotion();
-                    parentFrame.getHuman().heal(0.5);
+                    BigHealthPotion bigPotion = inventory.getBigHealthPotion();
+                    parentFrame.getHuman().heal(bigPotion);
                     usedItemName = "Большое зелье лечения";
                     parentFrame.updateLabels();
                     success = true;
@@ -89,8 +89,8 @@ public class InventoryDialog extends JDialog {
                 break;
             case "Малое зелье лечения":
                 if (inventory.getSmallHealthPotionCount() > 0) {
-                    SmallHealthPotion potion = inventory.getSmallHealthPotion();
-                    parentFrame.getHuman().heal(0.25);
+                    SmallHealthPotion smallPotion = inventory.getSmallHealthPotion();
+                    parentFrame.getHuman().heal(smallPotion);
                     usedItemName = "Малое зелье лечения";
                     parentFrame.updateLabels();
                     success = true;

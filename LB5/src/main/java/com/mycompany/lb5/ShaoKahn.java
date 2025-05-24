@@ -19,6 +19,7 @@ public class ShaoKahn extends Player{
         return "Shao Kahn";
     }
     
+    @Override
     public String getIconSource(){
         return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Шао_Кан_(MK11).png";
     }

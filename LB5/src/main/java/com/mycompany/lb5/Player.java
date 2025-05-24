@@ -53,7 +53,8 @@ public abstract class Player {
         this.health = health;
     }
     
-    public void heal(double hu){
+    public void heal(Item item){
+        double hu = item.getHealKF();
         this.health = (int) (health + maxHealth * hu);
         if (this.health > maxHealth) {
             this.health = maxHealth;

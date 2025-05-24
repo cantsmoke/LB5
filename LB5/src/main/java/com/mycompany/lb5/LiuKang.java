@@ -19,6 +19,7 @@ public class LiuKang extends Player{
         return "Liu Kang";
     }
     
+    @Override
     public String getIconSource(){
         return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Liukangmk11.png";
     }

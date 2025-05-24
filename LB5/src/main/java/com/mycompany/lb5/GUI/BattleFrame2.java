@@ -336,8 +336,8 @@ public class BattleFrame2 extends JFrame {
     
     private boolean tryRessurection() {
         if (human.getInventory().getRessurectionCrossCount() > 0) {
-            human.getInventory().getRessurectionCross();
-            int restored = (int) Math.ceil(human.getMaxHealth() * 0.05);
+            RessurectionCross ressurectionCross = human.getInventory().getRessurectionCross();
+            int restored = (int) Math.ceil(human.getMaxHealth() * ressurectionCross.getHealKF());
             if (restored < 1) restored = 1;
             human.setHealth(restored);
             JOptionPane.showMessageDialog(this, 
@@ -377,8 +377,4 @@ public class BattleFrame2 extends JFrame {
         enemyHpBar.setForeground(Color.GREEN);
     }
     
-    private boolean checkIfPlayerStunned(){
-        return human.isStunned();
-    }
-
 }

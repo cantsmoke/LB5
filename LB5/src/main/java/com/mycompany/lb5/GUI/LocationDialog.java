@@ -11,7 +11,6 @@ package com.mycompany.lb5.GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class LocationDialog extends JDialog {
     private int locations = -1;

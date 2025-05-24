@@ -10,4 +10,5 @@ package com.mycompany.lb5;
  */
 public interface Item {
     String getName();
+    double getHealKF();
 }
