@@ -6,12 +6,12 @@ package com.mycompany.lb5;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  *
- * @author Мария
+ * @author Арсений
  */
 public abstract class Player {
+    
     protected int level;
     protected int health;
     protected int maxHealth;
@@ -19,7 +19,9 @@ public abstract class Player {
     protected int damage;
     protected int attack;
     protected int winAmount;
-    
+    protected int debuffTurnDuration = 0;
+    private boolean skipNextDebuffTurn = false;
+    private boolean stunned = false;
     ArrayList<ActionType> playerActionsHistory = new ArrayList<>();
 
     public Player(int level, int health, int damage) {
@@ -82,12 +84,6 @@ public abstract class Player {
     public void setLevel(){
         this.level++;
     }
-
-    public abstract String getName();
-    
-    public abstract String getIconSource();
-    
-    public abstract int getReceivedPoints();
     
     public int attackEnemy(){
         playerActionsHistory.add(ActionType.ATTACK);
@@ -116,9 +112,7 @@ public abstract class Player {
             }
         }
         return defendCount;
-    }
-    
-    private boolean stunned = false;
+    }  
 
     public void setStunned(boolean val) {
         this.stunned = val;
@@ -132,23 +126,30 @@ public abstract class Player {
         this.stunned = false;
     }
     
-    
-    
-    protected int debuffTurnDuration = 0;
-    
-    public void setDebuff(Player enemy){
-        int debuffDuration = enemy.getLevel();
-        if (debuffDuration != 0){
-            this.debuffTurnDuration = debuffDuration;
-            this.setDamage((int) (this.getDamage() * 0.5));
-            enemy.setDamage((int) (enemy.getDamage() * 1.25));
-        }
+    public boolean isSkipNextDebuffTurn() {
+        return skipNextDebuffTurn;
+    }
+
+    public void setSkipNextDebuffTurn(boolean skipNextDebuffTurn) {
+        this.skipNextDebuffTurn = skipNextDebuffTurn;
+    }
+ 
+    public void setDebuff(Player source) {
+        this.debuffTurnDuration += source.getLevel();
+        this.setDamage((int)(this.getDamage() * 0.5));
+        source.setDamage((int)(source.getMaxDamage() * 1.25));
+        this.skipNextDebuffTurn = true;
+    }
+
+    public void increaseDuration(){
+        this.debuffTurnDuration++;
     }
     
-    public void resetDebuff(Player enemy){
+    public void resetDebuff(Player player){
         this.setDamage(this.getMaxDamage());
-        enemy.setDamage(enemy.getMaxDamage());
-        //логика сброса увеличенного урона врага и вовращения урона игроку
+        player.setDamage(player.getMaxDamage());
+        this.debuffTurnDuration = 0;
+        this.skipNextDebuffTurn = false;
     }
     
     public int getDebuff(){
@@ -157,11 +158,9 @@ public abstract class Player {
     
     public void reduceDebuffDuration(){
         if (debuffTurnDuration != 0){
-            this.debuffTurnDuration--;
+            debuffTurnDuration--;
         }
     }
-
-    
     
     public List<ActionType> getPlayerActionsHistory() {
         return this.playerActionsHistory;
@@ -174,6 +173,12 @@ public abstract class Player {
     public int getWinAmount(){
         return this.winAmount;
     }
+    
+    public abstract String getName();
+    
+    public abstract String getIconSource();
+    
+    public abstract int getReceivedPoints();
     
     public abstract int returnExperienceForWin();
 

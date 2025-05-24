@@ -5,7 +5,7 @@
 package com.mycompany.lb5.GUI;
 /**
  *
- * @author ababa
+ * @author Арсений
  */
 import com.mycompany.lb5.ActionType;
 import com.mycompany.lb5.BigHealthPotion;
@@ -98,7 +98,10 @@ public class BattleFrame2 extends JFrame {
         buttonPanel.add(btnDefend);
         buttonPanel.add(btnDebuff);
         buttonPanel.add(btnItems);
+        btnDebuff.setEnabled(enemy.getDebuff() == 0 && human.getLevel() != 0);
         add(buttonPanel, BorderLayout.SOUTH);
+        
+        System.out.println(enemy.getLevel());
     }
 
     private JPanel createPlayerPanel(Player player, boolean isHuman) {
@@ -136,7 +139,6 @@ public class BattleFrame2 extends JFrame {
         panel.add(lblDamage);
         panel.add(lblLevel);
         panel.add(Box.createVerticalStrut(10));
-
         ImageIcon icon = null;
         if(isHuman) {
             icon = new ImageIcon("C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png");
@@ -147,7 +149,6 @@ public class BattleFrame2 extends JFrame {
             enemyIconLabel = new JLabel("Текст", icon, JLabel.CENTER);
             panel.add(enemyIconLabel);
         }
-
         panel.add(Box.createVerticalGlue());
         return panel;
     }
@@ -203,6 +204,12 @@ public class BattleFrame2 extends JFrame {
             playerHpBar.setForeground(Color.GREEN);
             enemyHpBar.setForeground(Color.GREEN);
         }
+        if(enemy.getDebuff() != 0){
+            enemyHpBar.setForeground(Color.BLUE);
+        }
+        if(human.getDebuff() != 0){
+            playerHpBar.setForeground(Color.BLUE);
+        }
         lblPlayerDamage.setText("Урон: " + human.getDamage());
         lblPlayerLevel.setText("Уровень: " + human.getLevel());
         lblEnemyDamage.setText("Урон: " + enemy.getDamage());
@@ -211,44 +218,60 @@ public class BattleFrame2 extends JFrame {
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
         enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
         
+        btnDebuff.setEnabled(
+            human.getDebuff() == 0 &&
+            enemy.getDebuff() == 0 &&
+            human.getLevel() != 0
+        );
+        
     }
 
     public void onAttackClicked(ActionEvent e) {
-        
         updateLabels();
-        System.out.println(human.getHealth());
-        System.out.println(enemy.getHealth());
         String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.ATTACK);
-        System.out.println(human.getHealth());
-        System.out.println(enemy.getHealth());
-        System.out.println("---------");
         logArea.append(battleLog);
-        
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
+
+        enemy.reduceDebuffDuration();
+        if(enemy.getDebuff() == 0 && human.getDebuff() == 0 ){
+            enemy.resetDebuff(human);
+        }
+
+        human.reduceDebuffDuration();
+        if(human.getDebuff() == 0 && enemy.getDebuff() == 0 ){
+            human.resetDebuff(enemy);
+        }
         
-        checkDebuffs();
-        
+        updateLabels();
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
     }
+   
 
     public void onDefendClicked(ActionEvent e) {
-        updateLabels();        
-        System.out.println(human.getHealth());
-        System.out.println(enemy.getHealth());
+        updateLabels();    
         String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.DEFEND);
-        System.out.println(human.getHealth());
-        System.out.println(enemy.getHealth());
-        System.out.println("---------");
         logArea.append(battleLog);
-        
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
+
+        enemy.reduceDebuffDuration();
+        if(enemy.getDebuff() == 0 && human.getDebuff() == 0 ){
+            enemy.resetDebuff(human);
+        }
+
+        if (human.isSkipNextDebuffTurn()) {
+            human.setSkipNextDebuffTurn(false);
+        } else {
+            human.reduceDebuffDuration();
+        }
+        if(human.getDebuff() == 0 && enemy.getDebuff() == 0 ){
+            human.resetDebuff(enemy);
+        }
         
-        checkDebuffs();
-                
+        updateLabels();   
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
         enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
@@ -256,29 +279,15 @@ public class BattleFrame2 extends JFrame {
     
     private void onDebuffClicked(ActionEvent e) {
         updateLabels();
-        System.out.println(enemy.getHealth());
-        String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.DEBUFF);
-        System.out.println(enemy.getHealth());
-        logArea.append(battleLog);
         
+        String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.DEBUFF);
+        logArea.append(battleLog);
+
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
         
-        checkDebuffs();
-        
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
-    }
-
-    public void checkDebuffs(){
-        human.reduceDebuffDuration();
-        enemy.reduceDebuffDuration();
-        if(human.getDebuff() == 0){
-            human.resetDebuff(enemy);
-        }
-        if(enemy.getDebuff() == 0){
-            enemy.resetDebuff(human);
-        }
     }
     
     public void onItemsClicked(ActionEvent e) {
@@ -290,10 +299,8 @@ public class BattleFrame2 extends JFrame {
         if (enemy.getHealth() <= 0) {
             human.addWin();
             human.addPoints(enemy.getReceivedPoints());
-            
             currentEnemyIndex++;
-            
-            int defeatedNumber = currentEnemyIndex; // т.к. индекс увеличили
+            int defeatedNumber = currentEnemyIndex;
             int totalEnemies = enemyList.size();
             JOptionPane.showMessageDialog(this, 
                 "Побежден враг " + defeatedNumber + " из " + totalEnemies + "!",
@@ -303,14 +310,11 @@ public class BattleFrame2 extends JFrame {
             human.gainExperience(enemy.returnExperienceForWin());
             checkLevelUpdate();
             playerExpLabel.setText("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
-            
             processItemDrop();
-            
             logArea.setText("");
-            
-            if (currentEnemyIndex < enemyList.size()) {//надо проверить
+            if (currentEnemyIndex < enemyList.size()) {
                 enemy = enemyList.get(currentEnemyIndex);
-                resetBattle(); // сбросить HP и статус
+                resetBattle();
                 logArea.append("\nСледующий враг: " + enemy.getName() + "\n");
                 logArea.append("-----------------\n");
             } else {
@@ -324,13 +328,11 @@ public class BattleFrame2 extends JFrame {
     private void processItemDrop() {
         double smallPotionDropP = Math.random();
         double bigPotionDropP = Math.random();
-        double ressurectionCrossDropP = Math.random();
-        
+        double ressurectionCrossDropP = Math.random(); 
         double probabilityMultiplier = 1;
         if (enemy instanceof ShaoKahn){
             probabilityMultiplier = 1.5;
         }
-
         if (smallPotionDropP < 0.25 * probabilityMultiplier) {
             human.getInventory().addSmallHealthPotion(new SmallHealthPotion());
             JOptionPane.showMessageDialog(this, "Вам выпало: малое зелье лечения!");
@@ -347,7 +349,7 @@ public class BattleFrame2 extends JFrame {
         if (human.getExperience() >= human.getRequiredExperiance()){
             human.levelUp();
             showLevelUpDialog();
-            human.setRequiredExperiance(); //добавить изменение хар-ик врагов
+            human.setRequiredExperiance();
             for(Player enemy: enemyList){
                 enemy.updateCharacteristicsBasedOnLevel(human.getLevel());
             }
@@ -400,20 +402,14 @@ public class BattleFrame2 extends JFrame {
     }
 
     private void resetBattle() {
-        // Сбрасываем здоровье к максимальному
         human.setHealth(human.getMaxHealth());
         enemy.setHealth(enemy.getMaxHealth());
 
-        // Очищаем статусы, если есть
-        human.resetStatus(); // например, isStunned = false;
+        human.resetStatus();
         enemy.resetStatus();
-        
-        if(human.getDebuff() != 0){
-            human.resetDebuff(enemy);
-        }
-        if(enemy.getDebuff() != 0){
-            enemy.resetDebuff(human);
-        }
+
+        human.resetDebuff(enemy);
+        enemy.resetDebuff(human);
         
         playerIconLabel.setIcon(new ImageIcon(human.getIconSource()));
         enemyIconLabel.setIcon(new ImageIcon(enemy.getIconSource()));
@@ -426,7 +422,6 @@ public class BattleFrame2 extends JFrame {
         enemyHpBar.setMaximum(enemy.getMaxHealth());
 
         updateLabels();
-        
         logArea.setText("");
         
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
@@ -435,5 +430,4 @@ public class BattleFrame2 extends JFrame {
         playerHpBar.setForeground(Color.GREEN);
         enemyHpBar.setForeground(Color.GREEN);
     }
-    
 }

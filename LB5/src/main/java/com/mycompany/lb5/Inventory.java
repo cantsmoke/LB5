@@ -5,7 +5,6 @@
 package com.mycompany.lb5;
 
 import java.util.Stack;
-
 /**
  *
  * @author Arseniy
@@ -68,6 +67,4 @@ public class Inventory {
         result[2] = "Крест воскрешения: " + getRessurectionCrossCount();
         return result;
     }
-
-    
 }

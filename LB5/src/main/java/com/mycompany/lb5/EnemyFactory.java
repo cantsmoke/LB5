@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5;
-
 /**
  *
- * @author Мария
+ * @author Арсений
  */
 public class EnemyFactory {
     public static Player createEnemy(EnemyType type) {
@@ -25,5 +24,4 @@ public class EnemyFactory {
                 throw new IllegalArgumentException("Такого типа соперника нет: " + type);
         }
     }
-    
 }

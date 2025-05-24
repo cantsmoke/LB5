@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package com.mycompany.lb5;
-
 /**
  *
  * @author Arseniy

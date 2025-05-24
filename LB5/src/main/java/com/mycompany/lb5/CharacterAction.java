@@ -5,7 +5,7 @@
 package com.mycompany.lb5;
 /**
  *
- * @author Мария
+ * @author Арсений
  */
 public class CharacterAction {
     
@@ -37,7 +37,7 @@ public class CharacterAction {
         }
         if (enemy instanceof SubZero) {
             double debuffProbability = Math.random();
-            if(debuffProbability < 0.2){
+            if(debuffProbability < 0.25 && human.getDebuff() == 0 && enemy.getLevel() != 0 && enemy.getDebuff() == 0){
                 enemyAction = ActionType.DEBUFF;
             } else {
                 enemyAction = adaptiveBehaviourChooser(40, 60, human);

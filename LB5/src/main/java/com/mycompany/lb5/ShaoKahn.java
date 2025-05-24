@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5;
-
 /**
  *
- * @author Мария
+ * @author Арсений
  */
 public class ShaoKahn extends Player{
     
@@ -41,7 +40,7 @@ public class ShaoKahn extends Player{
         int updatedDamage = 44 + (playerLevel) * 15;
         this.health = updatedHealth;
         this.damage = updatedDamage;
-        this.maxHealth = updatedHealth; // Добавить эту строку
-        this.maxDamage = updatedDamage; // И эту тоже
+        this.maxHealth = updatedHealth;
+        this.maxDamage = updatedDamage;
     }
 }

@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5;
-
 /**
  *
  * @author Arseniy
@@ -18,6 +17,5 @@ public class BigHealthPotion implements Item {
     @Override
     public double getHealKF() {
         return 0.5;
-    }
-     
+    }  
 }

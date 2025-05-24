@@ -7,10 +7,9 @@ package com.mycompany.lb5;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
-
 /**
  *
- * @author Мария
+ * @author Арсения
  */
 public class Game {
     
@@ -74,8 +73,7 @@ public class Game {
     }
     
     public Human NewHuman(){
-        Human human = new Human (0, 100, 50); //пока вместо 16 поставил урон 50 чтобы тестить
+        Human human = new Human (0, 100, 50);
         return human;
-    }
-    
+    }  
 }

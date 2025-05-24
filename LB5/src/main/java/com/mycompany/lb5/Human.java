@@ -3,21 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5;
-
-import java.util.ArrayList;
-
 /**
  *
- * @author Мария
+ * @author Арсений
  */
 public class Human extends Player{
     
-
     private int points;
     private int experience;
     private int win;
     private int nextexperience;
-    
     private Inventory inventory;
     
     public Human(int level, int health, int  damage){
@@ -26,7 +21,6 @@ public class Human extends Player{
         this.experience=0;
         this.nextexperience=40;
         this.win=0;
-        
         inventory = new Inventory();
     }
     

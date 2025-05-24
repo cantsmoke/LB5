@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-
 /**
  *
  * @author Arseniy
@@ -18,14 +17,9 @@ import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 
-    static Object getGame() {
-        return game;
-    }
-
     private JButton btnNewGame;
     private JButton btnShowResults;
-    private int selectedLocations = 1; // по умолчанию
-    
+    private int selectedLocations = 1;
     public static Game game = new Game();
     Human human = null;
 
@@ -33,12 +27,16 @@ public class MainFrame extends JFrame {
         super("Игра: Битва героев");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
-        setLocationRelativeTo(null); // окно по центру экрана
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(2, 1, 10, 10));
 
         initializeComponents();
         addComponentsToFrame();
         setupActions();
+    }
+    
+    static Object getGame() {
+        return game;
     }
 
     private void initializeComponents() {
@@ -66,9 +64,9 @@ public class MainFrame extends JFrame {
             selectedLocations = locationDialog.getLocations();
             System.out.println("Игрок выбрал " + selectedLocations + " локаций.");
 
-            human = game.NewHuman(); // создаём игрока
-            startFirstLocation(human, 1); // начинаем первую локацию
-            setVisible(false); // скрываем главное меню
+            human = game.NewHuman();
+            startFirstLocation(human, 1);
+            setVisible(false);
         }
     }
     
@@ -78,11 +76,9 @@ public class MainFrame extends JFrame {
         battleFrame.setVisible(true);
     }
 
-
     public void onShowResultsClicked(ActionEvent e) {
         System.out.println("Кнопка 'Посмотреть таблицу результатов' нажата.");
         ScoreboardDialog scoreboardDialog = new ScoreboardDialog(this);
         scoreboardDialog.setVisible(true);
     }
-
 }

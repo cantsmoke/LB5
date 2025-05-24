@@ -3,14 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-
 /**
  *
  * @author Arseniy
  */
 import com.mycompany.lb5.BigHealthPotion;
 import com.mycompany.lb5.Inventory;
-import com.mycompany.lb5.RessurectionCross;
 import com.mycompany.lb5.SmallHealthPotion;
 import javax.swing.*;
 import java.awt.*;
@@ -23,33 +21,25 @@ public class InventoryDialog extends JDialog {
     private BattleFrame2 parentFrame; 
 
     public InventoryDialog(BattleFrame2 parent) {
-        super(parent, "Мешок предметов", true); // модальное окно
-        this.parentFrame = parent; // Сохраняем родительское окно
+        super(parent, "Мешок предметов", true);
+        this.parentFrame = parent;
         setSize(400, 300);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout(10, 10));
-
         initializeComponents();
         setupActions();
     }
 
     private void initializeComponents() {
-        // Список предметов
         itemsList = new JList<>(parentFrame.getHuman().getInventory().getInventoryInfo());
         itemsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         itemsList.setLayoutOrientation(JList.VERTICAL);
-        itemsList.setVisibleRowCount(-1); // чтобы не было строк по умолчанию
+        itemsList.setVisibleRowCount(-1);
 
         JScrollPane listScroller = new JScrollPane(itemsList);
-
-        // Кнопка использования предмета
         btnUseItem = new JButton("Использовать");
-
-        // Панель с кнопкой
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(btnUseItem);
-
-        // Добавляем компоненты
         add(listScroller, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -65,18 +55,10 @@ public class InventoryDialog extends JDialog {
             JOptionPane.showMessageDialog(this, "Выберите предмет для использования.", "Ошибка", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        // Пример связанного инвентаря
-        Inventory inventory = parentFrame.getHuman().getInventory(); // или как у вас хранится ссылка на инвентарь
-
-        // Попробуем использовать предмет
+        Inventory inventory = parentFrame.getHuman().getInventory();
         boolean success = false;
         String usedItemName = null;
-
-        // В зависимости от формата item (например, "Большое зелье лечения: 3")
-        // Лучше выделить только название:
         String itemType = selectedItem.split(":")[0].trim();
-
         switch (itemType) {
             case "Большое зелье лечения":
                 if (inventory.getBigHealthPotionCount() > 0) {
@@ -106,7 +88,6 @@ public class InventoryDialog extends JDialog {
                 JOptionPane.showMessageDialog(this, "Неизвестный предмет: " + selectedItem, "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
         }
-
         if (success) {
             JOptionPane.showMessageDialog(this, "Вы использовали предмет: " + usedItemName);
             dispose();

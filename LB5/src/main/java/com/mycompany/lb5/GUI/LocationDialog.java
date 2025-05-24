@@ -3,12 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-
 /**
  *
- * @author ababa
+ * @author Арсений
  */
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -20,14 +18,13 @@ public class LocationDialog extends JDialog {
         super(parent, "Выберите количество локаций", true);
         setSize(350, 150);
         setLocationRelativeTo(parent);
-
+        
         JLabel label = new JLabel("Введите количество локаций (от 1 до 10):");
         JTextField inputField = new JTextField();
         JButton confirmButton = new JButton("Подтвердить");
-
         confirmButton.addActionListener(e -> {
             try {
-                int value = Integer.parseInt(inputField.getText());
+                int value = Integer.parseInt(inputField.getText().trim());
                 if (value >= 1 && value <= 10) {
                     locations = value;
                     confirmed = true;
@@ -39,7 +36,6 @@ public class LocationDialog extends JDialog {
                 JOptionPane.showMessageDialog(this, "Введите корректное число.");
             }
         });
-
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.add(label, BorderLayout.NORTH);
         panel.add(inputField, BorderLayout.CENTER);

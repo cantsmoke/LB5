@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5;
-
 /**
  *
  * @author Arseniy
@@ -19,5 +18,4 @@ public class SmallHealthPotion implements Item{
     public double getHealKF() {
         return 0.25;
     }
-    
 }

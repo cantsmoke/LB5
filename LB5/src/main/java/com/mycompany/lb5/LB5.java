@@ -6,10 +6,9 @@ package com.mycompany.lb5;
 
 import com.mycompany.lb5.GUI.MainFrame;
 import javax.swing.SwingUtilities;
-
 /**
  *
- * @author Мария
+ * @author Арсений
  */
 public class LB5{
     public static void main(String[] args) {
