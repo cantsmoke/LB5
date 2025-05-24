@@ -73,5 +73,5 @@ public class ScoreboardDialog extends JDialog {
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
     }
-    
+     
 }

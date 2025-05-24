@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5;
+
 /**
  *
  * @author Мария
@@ -11,17 +12,35 @@ public class EnemyFactory {
     public static Player createEnemy(EnemyType type) {
         switch (type) {
             case TANK:
-                return new Baraka(1, 100, 12);
+                return new Baraka(0, 100, 12);
             case MAGICIAN:
-                return new SubZero(1, 60, 16);
+                return new SubZero(0, 85, 16);
             case FIGHTER:
-                return new LiuKang(1, 70, 20);
+                return new LiuKang(0, 70, 20);
             case SOLDIER:
-                return new SonyaBlade(1, 80, 16);
+                return new SonyaBlade(0, 80, 16);
             case BOSS:
                 return new ShaoKahn(3, 145, 44);
             default:
                 throw new IllegalArgumentException("Такого типа соперника нет: " + type);
         }
     }
+    
+//    public static Player createEnemy(EnemyType type) {
+//        switch (type) {
+//            case TANK:
+//                return new SubZero(1, 85, 16);
+//            case MAGICIAN:
+//                return new SubZero(1, 85, 16);
+//            case FIGHTER:
+//                return new SubZero(1, 85, 16);
+//            case SOLDIER:
+//                return new SubZero(1, 85, 16);
+//            case BOSS:
+//                return new ShaoKahn(3, 145, 44);
+//            default:
+//                throw new IllegalArgumentException("Такого типа соперника нет: " + type);
+//        }
+//    }
+    
 }

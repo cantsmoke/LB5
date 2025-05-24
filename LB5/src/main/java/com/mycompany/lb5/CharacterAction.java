@@ -36,7 +36,12 @@ public class CharacterAction {
             enemyAction = adaptiveBehaviourChooser(30, 70, human);
         }
         if (enemy instanceof SubZero) {
-            enemyAction = adaptiveBehaviourChooser(40, 60, human);
+            double debuffProbability = Math.random();
+            if(debuffProbability < 0.2){
+                enemyAction = ActionType.DEBUFF;
+            } else {
+                enemyAction = adaptiveBehaviourChooser(40, 60, human);
+            } 
         }
         if (enemy instanceof LiuKang) {
             enemyAction = adaptiveBehaviourChooser(50, 50, human);

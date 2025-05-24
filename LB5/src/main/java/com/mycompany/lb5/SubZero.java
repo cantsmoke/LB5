@@ -37,7 +37,7 @@ public class SubZero extends Player{
     @Override
     public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         this.level = playerLevel;
-        this.health = 60 + (playerLevel) * 15;
+        this.health = 85 + (playerLevel) * 15;
         this.damage = 16 + (playerLevel) * 10;
     }
     

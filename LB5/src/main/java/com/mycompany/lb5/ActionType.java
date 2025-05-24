@@ -11,5 +11,6 @@ package com.mycompany.lb5;
 public enum ActionType {
     ATTACK,
     DEFEND,
-    HEAL
+    HEAL,
+    DEBUFF
 }

@@ -25,6 +25,7 @@ public class BattleFrame2 extends JFrame {
     private JButton btnAttack;
     private JButton btnDefend;
     private JButton btnItems;
+    private JButton btnDebuff;
     private JProgressBar playerHpBar, enemyHpBar;
     private JLabel lblPlayerDamage, lblPlayerLevel;
     private JLabel lblEnemyDamage, lblEnemyLevel;
@@ -91,9 +92,11 @@ public class BattleFrame2 extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         btnAttack = new JButton("Атаковать");
         btnDefend = new JButton("Защититься");
+        btnDebuff = new JButton("Ослабить");
         btnItems = new JButton("Предметы");
         buttonPanel.add(btnAttack);
         buttonPanel.add(btnDefend);
+        buttonPanel.add(btnDebuff);
         buttonPanel.add(btnItems);
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -185,6 +188,7 @@ public class BattleFrame2 extends JFrame {
     private void setupActions() {
         btnAttack.addActionListener(this::onAttackClicked);
         btnDefend.addActionListener(this::onDefendClicked);
+        btnDebuff.addActionListener(this::onDebuffClicked);
         btnItems.addActionListener(this::onItemsClicked);
     }
 
@@ -210,27 +214,73 @@ public class BattleFrame2 extends JFrame {
     }
 
     public void onAttackClicked(ActionEvent e) {
+        
+        updateLabels();
+        System.out.println(human.getHealth());
+        System.out.println(enemy.getHealth());
         String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.ATTACK);
+        System.out.println(human.getHealth());
+        System.out.println(enemy.getHealth());
+        System.out.println("---------");
         logArea.append(battleLog);
         
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
+        
+        checkDebuffs();
+        
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
     }
 
-    public void onDefendClicked(ActionEvent e) {        
+    public void onDefendClicked(ActionEvent e) {
+        updateLabels();        
+        System.out.println(human.getHealth());
+        System.out.println(enemy.getHealth());
         String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.DEFEND);
+        System.out.println(human.getHealth());
+        System.out.println(enemy.getHealth());
+        System.out.println("---------");
         logArea.append(battleLog);
         
         updateLabels();
         checkWinCondition();
         checkLoseCondition();
+        
+        checkDebuffs();
+                
         playerStunLabel.setText("Игрок оглушен: " + human.isStunned());
         enemyStunLabel.setText("Враг оглушен: "+ enemy.isStunned());
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
     }
+    
+    private void onDebuffClicked(ActionEvent e) {
+        updateLabels();
+        System.out.println(enemy.getHealth());
+        String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.DEBUFF);
+        System.out.println(enemy.getHealth());
+        logArea.append(battleLog);
+        
+        updateLabels();
+        checkWinCondition();
+        checkLoseCondition();
+        
+        checkDebuffs();
+        
+        turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
+    }
 
+    public void checkDebuffs(){
+        human.reduceDebuffDuration();
+        enemy.reduceDebuffDuration();
+        if(human.getDebuff() == 0){
+            human.resetDebuff(enemy);
+        }
+        if(enemy.getDebuff() == 0){
+            enemy.resetDebuff(human);
+        }
+    }
+    
     public void onItemsClicked(ActionEvent e) {
         InventoryDialog inventoryDialog = new InventoryDialog(this);
         inventoryDialog.setVisible(true);
@@ -318,8 +368,9 @@ public class BattleFrame2 extends JFrame {
         if (choice == 0) {
             human.setDamage((int) (human.getDamage() + human.getDamage()*0.2));
         } else if (choice == 1) {
-            enemy.setMaxHealth((int) (human.getMaxHealth() + human.getMaxHealth()*0.25));
+            human.setMaxHealth((int) (human.getMaxHealth() + human.getMaxHealth()*0.25));
         }
+        updateLabels();
     }
 
     private void checkLoseCondition() {
@@ -350,12 +401,19 @@ public class BattleFrame2 extends JFrame {
 
     private void resetBattle() {
         // Сбрасываем здоровье к максимальному
-        human.setNewHealth(human.getMaxHealth());
-        enemy.setNewHealth(enemy.getMaxHealth());
+        human.setHealth(human.getMaxHealth());
+        enemy.setHealth(enemy.getMaxHealth());
 
         // Очищаем статусы, если есть
         human.resetStatus(); // например, isStunned = false;
         enemy.resetStatus();
+        
+        if(human.getDebuff() != 0){
+            human.resetDebuff(enemy);
+        }
+        if(enemy.getDebuff() != 0){
+            enemy.resetDebuff(human);
+        }
         
         playerIconLabel.setIcon(new ImageIcon(human.getIconSource()));
         enemyIconLabel.setIcon(new ImageIcon(enemy.getIconSource()));
@@ -364,6 +422,7 @@ public class BattleFrame2 extends JFrame {
         
         enemyNameLabel.setText("Враг " + enemy.getName());
         
+        playerHpBar.setMaximum(human.getMaxHealth());
         enemyHpBar.setMaximum(enemy.getMaxHealth());
 
         updateLabels();

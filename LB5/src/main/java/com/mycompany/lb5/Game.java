@@ -74,7 +74,7 @@ public class Game {
     }
     
     public Human NewHuman(){
-        Human human = new Human (0,80,100); //пока вместо 16 поставил урон 100 чтобы тестить
+        Human human = new Human (0, 100, 50); //пока вместо 16 поставил урон 50 чтобы тестить
         return human;
     }
     

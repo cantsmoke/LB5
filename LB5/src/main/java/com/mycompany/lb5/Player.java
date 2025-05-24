@@ -15,6 +15,7 @@ public abstract class Player {
     protected int level;
     protected int health;
     protected int maxHealth;
+    protected int maxDamage;
     protected int damage;
     protected int attack;
     protected int winAmount;
@@ -26,6 +27,7 @@ public abstract class Player {
         this.health = health;
         this.maxHealth = health;
         this.damage = damage;
+        this.maxDamage = damage;
         this.winAmount = 0;
     }
 
@@ -61,20 +63,20 @@ public abstract class Player {
         }
     }
 
-    public void setNewHealth(int health) {
-        this.health = health;
-    }
-
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
-    }
-    
-    public int getMaxHealth(int maxHealth) {
-        return this.maxHealth;
     }
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+    
+    public void setMaxDamage(int maxDamage) {
+        this.maxDamage = maxDamage;
+    }
+    
+    public int getMaxDamage() {
+        return this.maxDamage;
     }
     
     public void setLevel(){
@@ -129,7 +131,38 @@ public abstract class Player {
     public void resetStatus() {
         this.stunned = false;
     }
+    
+    
+    
+    protected int debuffTurnDuration = 0;
+    
+    public void setDebuff(Player enemy){
+        int debuffDuration = enemy.getLevel();
+        if (debuffDuration != 0){
+            this.debuffTurnDuration = debuffDuration;
+            this.setDamage((int) (this.getDamage() * 0.5));
+            enemy.setDamage((int) (enemy.getDamage() * 1.25));
+        }
+    }
+    
+    public void resetDebuff(Player enemy){
+        this.setDamage(this.getMaxDamage());
+        enemy.setDamage(enemy.getMaxDamage());
+        //логика сброса увеличенного урона врага и вовращения урона игроку
+    }
+    
+    public int getDebuff(){
+        return this.debuffTurnDuration;
+    }
+    
+    public void reduceDebuffDuration(){
+        if (debuffTurnDuration != 0){
+            this.debuffTurnDuration--;
+        }
+    }
 
+    
+    
     public List<ActionType> getPlayerActionsHistory() {
         return this.playerActionsHistory;
     }

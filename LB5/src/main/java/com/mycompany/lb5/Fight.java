@@ -5,6 +5,9 @@
 package com.mycompany.lb5;
 
 //ADD IMAGE!!!
+import static com.mycompany.lb5.ActionType.ATTACK;
+import static com.mycompany.lb5.ActionType.DEBUFF;
+import static com.mycompany.lb5.ActionType.DEFEND;
 import static com.mycompany.lb5.ActionType.HEAL;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -26,6 +29,7 @@ public class Fight {
         switch (action) {
             case ATTACK -> battleLog = processPlayersAttack(human, enemy);
             case DEFEND -> battleLog = processPlayersDefend(human, enemy);
+            case DEBUFF -> battleLog = processPlayersDebuff(human, enemy);
         }
         return battleLog;
     }
@@ -89,6 +93,18 @@ public class Fight {
                         isPlayersTurn = TRUE;
                     }
                     log.append("Противник получил двойной урон!\n");
+                    break;
+                
+                case DEBUFF:
+                    if (isPlayersTurn){
+                        enemy.setHealth((int) (enemy.getHealth() - human.attackEnemy() * 1.15));
+                        log.append("Враг попытался ослабить игрока, но игрок нанес увеличенный урон!\n");
+                        isPlayersTurn = FALSE;
+                    } else {
+                        enemy.setHealth((int) (enemy.getHealth() - human.attackEnemy() * 1.15));
+                        log.append("Враг попытался ослабить игрока, но игрок нанес увеличенный урон!\n");
+                        isPlayersTurn = TRUE;
+                    }             
                     break;
             }
         }
@@ -172,10 +188,154 @@ public class Fight {
                     }
                     log.append("Противник восстановил здоровье!\n");
                     break;
+                    
+                case DEBUFF:
+                    double enemyDebuffProbability = Math.random();
+                    if (isPlayersTurn){
+                        if(enemyDebuffProbability < 0.75){
+                            human.setDebuff(enemy); //типо такого
+                            log.append("Игрок ослаблен на ").append(enemy.getLevel()).append(" ходов!").append("\n");
+                        } else {
+                            log.append("Игрок не был ослаблен!\n");
+                        }
+                        isPlayersTurn = FALSE;
+                    } else {
+                        if(enemyDebuffProbability < 0.75){
+                            human.setDebuff(enemy); //типо такого
+                            log.append("Игрок ослаблен на ").append(enemy.getLevel()).append(" ходов!").append("\n");
+                        } else {
+                            log.append("Игрок не был ослаблен!\n");
+                        }
+                        isPlayersTurn = TRUE;
+                    }
+                    break;
             }
         }
         log.append("-----------------\n");
         return log.toString();
     }
+
+    private String processPlayersDebuff(Player human, Player enemy) {
+        StringBuilder log = new StringBuilder();
+        
+        if (isPlayersTurn && human.isStunned()) {
+            log.append("Игрок пропускает ход из-за оглушения!\n");
+            ActionType enemyBehaviour = ActionType.ATTACK;
+            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
+            human.setHealth(human.getHealth() - enemy.attackEnemy());
+            human.setStunned(false);
+            isPlayersTurn = FALSE;
+            log.append("-----------------\n");
+            return log.toString();
+        } else if (!isPlayersTurn && enemy.isStunned()) {
+            log.append("Противник пропускает ход из-за оглушения!\n");
+            
+            //логика накладывающая дебафф
+            enemy.setDebuff(human);
+            log.append("Враг ослаблен на ").append(human.getLevel()).append(" ходов!").append("\n");
+            
+            enemy.setStunned(false);
+            isPlayersTurn = true;
+            log.append("-----------------\n");
+            return log.toString();
+        } else {
+            ActionType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
+            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
+            double debuffProbability = Math.random();
+
+            switch (enemyBehaviour) {
+                case DEFEND:
+                    if (isPlayersTurn){//этот иф верный
+                        if(debuffProbability < 0.75){
+                            enemy.setDebuff(human); //типо такого
+                            log.append("Враг ослаблен на ").append(human.getLevel()).append(" ходов!").append("\n");
+                        } else {
+                            log.append("Враг не был ослаблен!\n");
+                        }
+                        isPlayersTurn = FALSE;
+                    } else {
+                        if(debuffProbability < 0.75){
+                            enemy.setDebuff(human); //типо такого
+                            log.append("Враг ослаблен на ").append(human.getLevel()).append(" ходов!").append("\n");
+                        } else {
+                            log.append("Враг не был ослаблен!\n");
+                        }
+                        isPlayersTurn = TRUE;
+                    }
+                    break;
+
+                case ATTACK:
+                    if (isPlayersTurn){
+                        human.setHealth((int) (human.getHealth() - enemy.attackEnemy() * 1.15));
+                        log.append("Игрок попытался ослабить врага, но враг нанес увеличенный урон!\n");
+                        isPlayersTurn = FALSE;
+                    } else {
+                        human.setHealth((int) (human.getHealth() - enemy.attackEnemy() * 1.15));
+                        log.append("Игрок попытался ослабить врага, но враг нанес увеличенный урон!\n");
+                        isPlayersTurn = TRUE;
+                    }
+                    break;
+                    
+                case HEAL:
+                    if (isPlayersTurn){
+                        if(debuffProbability < 0.75){
+                            enemy.setDebuff(human); //типо такого
+                            log.append("Враг восстановил здоровье и был ослаблен на ").append(human.getLevel()).append(" ходов!").append("\n");
+                        } else {
+                            log.append("Враг не был ослаблен и восстановил здоровье!\n");
+                        }
+                        isPlayersTurn = FALSE;
+                    } else {
+                        if(debuffProbability < 0.75){
+                            enemy.setDebuff(human); //типо такого
+                            log.append("Враг восстановил здоровье и был ослаблен на ").append(human.getLevel()).append(" ходов!").append("\n");
+                        } else {
+                            log.append("Враг не был ослаблен и восстановил здоровье!\n");
+                        }
+                        isPlayersTurn = TRUE;
+                    }
+                    
+                    break;
+                    
+                case DEBUFF:
+                    double enemyDebuffProbability = Math.random();
+                    if (isPlayersTurn){
+                        if(debuffProbability < 0.75 && enemyDebuffProbability < 0.75){
+                            enemy.setDebuff(human); //типо такого
+                            human.setDebuff(enemy);
+                            log.append("Враг и игрок были ослаблены на ").append(human.getLevel()).append(" и ").append(enemy.getLevel()).append(" ходов соответсвенно!").append("\n");
+                        } else if (debuffProbability > 0.75 && enemyDebuffProbability < 0.75){
+                            human.setDebuff(enemy);
+                            log.append("Игрок не смог ослабить врага, но враг смог ослабить игрока на ").append(enemy.getLevel()).append(" ходов!\n");
+                        } else if (debuffProbability < 0.75 && enemyDebuffProbability > 0.75){
+                            enemy.setDebuff(human);
+                            log.append("Враг не смог ослабить игрока, но игрок смог ослабить врага на ").append(human.getLevel()).append(" ходов!\n");
+                        } else {
+                            log.append("Игрок и враг попытались ослабить друг друга, но у обоих не вышло!\n");
+                        }
+                        isPlayersTurn = FALSE;
+                    } else {
+                        if(debuffProbability < 0.75 && enemyDebuffProbability < 0.75){
+                            enemy.setDebuff(human); //типо такого
+                            human.setDebuff(enemy);
+                            log.append("Враг и игрок были ослаблены на ").append(human.getLevel()).append(" и ").append(enemy.getLevel()).append(" ходов соответсвенно!").append("\n");
+                        } else if (debuffProbability > 0.75 && enemyDebuffProbability < 0.75){
+                            human.setDebuff(enemy);
+                            log.append("Игрок не смог ослабить врага, но враг смог ослаюить игрока на ").append(enemy.getLevel()).append(" ходов!\n");
+                        } else if (debuffProbability < 0.75 && enemyDebuffProbability > 0.75){
+                            enemy.setDebuff(human);
+                            log.append("Враг не смог ослабить игрока, но игрок смог ослаюить врага на ").append(human.getLevel()).append(" ходов!\n");
+                        } else {
+                            log.append("Игрок и враг попытались ослабить друг друга, но у обоих не вышло!\n");
+                        }
+                        isPlayersTurn = TRUE;
+                    }
+                    break;
+            }
+        }
+        log.append("-----------------\n");
+        return log.toString();
+    }
+    
     
 }
