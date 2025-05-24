@@ -100,8 +100,6 @@ public class BattleFrame2 extends JFrame {
         buttonPanel.add(btnItems);
         btnDebuff.setEnabled(enemy.getDebuff() == 0 && human.getLevel() != 0);
         add(buttonPanel, BorderLayout.SOUTH);
-        
-        System.out.println(enemy.getLevel());
     }
 
     private JPanel createPlayerPanel(Player player, boolean isHuman) {
@@ -368,7 +366,7 @@ public class BattleFrame2 extends JFrame {
                 options[0]);
 
         if (choice == 0) {
-            human.setDamage((int) (human.getDamage() + human.getDamage()*0.2));
+            human.setMaxDamage((int) (human.getMaxDamage() + human.getMaxDamage()*0.2));
         } else if (choice == 1) {
             human.setMaxHealth((int) (human.getMaxHealth() + human.getMaxHealth()*0.25));
         }
@@ -410,6 +408,9 @@ public class BattleFrame2 extends JFrame {
 
         human.resetDebuff(enemy);
         enemy.resetDebuff(human);
+        
+        human.setDamage(human.getMaxDamage());
+        enemy.setDamage(enemy.getMaxDamage());
         
         playerIconLabel.setIcon(new ImageIcon(human.getIconSource()));
         enemyIconLabel.setIcon(new ImageIcon(enemy.getIconSource()));

@@ -48,6 +48,7 @@ public class WinDialog extends JDialog {
         System.out.println("Кнопка 'Далее' нажата.");
         dispose();
         if (parentFrame.getCurrentLocation() < parentFrame.getTotalLocations()) {
+            parentFrame.getHuman().setDamage(parentFrame.getHuman().getMaxDamage());
             BattleFrame2 nextBattle = new BattleFrame2(
                     parentFrame.getHuman(), 
                     parentFrame.getGame().generateEnemiesForLocation(parentFrame.getHuman().getLevel()), 
