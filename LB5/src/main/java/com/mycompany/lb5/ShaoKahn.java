@@ -37,8 +37,11 @@ public class ShaoKahn extends Player{
     @Override
     public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         this.level = playerLevel + 2;
-        this.health = 145 + (playerLevel) * 20;
-        this.damage = 44 + (playerLevel) * 15;
+        int updatedHealth = 145 + (playerLevel) * 20;
+        int updatedDamage = 44 + (playerLevel) * 15;
+        this.health = updatedHealth;
+        this.damage = updatedDamage;
+        this.maxHealth = updatedHealth; // Добавить эту строку
+        this.maxDamage = updatedDamage; // И эту тоже
     }
-    
 }

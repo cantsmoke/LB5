@@ -37,8 +37,11 @@ public class SubZero extends Player{
     @Override
     public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         this.level = playerLevel;
-        this.health = 85 + (playerLevel) * 15;
-        this.damage = 16 + (playerLevel) * 10;
+        int updatedHealth = 85 + (playerLevel) * 15;
+        int updatedDamage = 16 + (playerLevel) * 10;
+        this.health = updatedHealth;
+        this.damage = updatedDamage;
+        this.maxHealth = updatedHealth; // Добавить эту строку
+        this.maxDamage = updatedDamage; // И эту тоже
     }
-    
 }

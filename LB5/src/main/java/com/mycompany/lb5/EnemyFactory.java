@@ -26,21 +26,4 @@ public class EnemyFactory {
         }
     }
     
-//    public static Player createEnemy(EnemyType type) {
-//        switch (type) {
-//            case TANK:
-//                return new SubZero(1, 85, 16);
-//            case MAGICIAN:
-//                return new SubZero(1, 85, 16);
-//            case FIGHTER:
-//                return new SubZero(1, 85, 16);
-//            case SOLDIER:
-//                return new SubZero(1, 85, 16);
-//            case BOSS:
-//                return new ShaoKahn(3, 145, 44);
-//            default:
-//                throw new IllegalArgumentException("Такого типа соперника нет: " + type);
-//        }
-//    }
-    
 }

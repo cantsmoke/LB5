@@ -33,12 +33,15 @@ public class SonyaBlade extends Player{
     public int returnExperienceForWin() {
         return 20;
     }
-    
+
     @Override
     public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         this.level = playerLevel;
-        this.health = 80 + (playerLevel) * 15;
-        this.damage = 16 + (playerLevel) * 15;
+        int updatedHealth = 80 + (playerLevel) * 15;
+        int updatedDamage = 16 + (playerLevel) * 5;
+        this.health = updatedHealth;
+        this.damage = updatedDamage;
+        this.maxHealth = updatedHealth; // Добавить эту строку
+        this.maxDamage = updatedDamage; // И эту тоже
     }
-    
 }

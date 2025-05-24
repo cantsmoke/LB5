@@ -36,8 +36,12 @@ public class Baraka extends Player{
     @Override
     public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         this.level = playerLevel;
-        this.health = 100 + (playerLevel) * 15;
-        this.damage = 12 + (playerLevel) * 5;
+        int updatedHealth = 100 + (playerLevel) * 15;
+        int updatedDamage = 12 + (playerLevel) * 5;
+        this.health = updatedHealth;
+        this.damage = updatedDamage;
+        this.maxHealth = updatedHealth; // Добавить эту строку
+        this.maxDamage = updatedDamage; // И эту тоже
     }
-    
+
 }

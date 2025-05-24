@@ -37,8 +37,11 @@ public class LiuKang extends Player{
     @Override
     public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         this.level = playerLevel;
-        this.health = 70 + (playerLevel) * 15;
-        this.damage = 20 + (playerLevel) * 5;
+        int updatedHealth = 70 + (playerLevel) * 15;
+        int updatedDamage = 20 + (playerLevel) * 5;
+        this.health = updatedHealth;
+        this.damage = updatedDamage;
+        this.maxHealth = updatedHealth; // Добавить эту строку
+        this.maxDamage = updatedDamage; // И эту тоже
     }
-    
 }
