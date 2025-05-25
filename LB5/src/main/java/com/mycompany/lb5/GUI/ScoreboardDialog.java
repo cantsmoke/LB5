@@ -23,11 +23,13 @@ public class ScoreboardDialog extends JDialog {
     private JButton btnClose;
     private JTable table;
     private String[] columnNames = {"Место", "Имя", "Результат"};
+    private final MainFrame mainFrame;
 
-    public ScoreboardDialog(JFrame parent) {
+    public ScoreboardDialog(MainFrame parent) {
         super(parent, "Таблица рекордов", true);
         setSize(500, 300);
         setLocationRelativeTo(parent);
+        this.mainFrame = parent;
         setLayout(new BorderLayout(10, 10));
         initializeComponents();
         setupActions();
@@ -64,7 +66,5 @@ public class ScoreboardDialog extends JDialog {
 
     public void onCloseClicked(ActionEvent e) {
         dispose();
-        MainFrame mainFrame = new MainFrame();
-        mainFrame.setVisible(true);
     }   
 }
