@@ -291,6 +291,7 @@ public class BattleFrame2 extends JFrame {
     public void onItemsClicked(ActionEvent e) {
         InventoryDialog inventoryDialog = new InventoryDialog(this);
         inventoryDialog.setVisible(true);
+        updateLabels();
     }
     
     private void checkWinCondition() {
