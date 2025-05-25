@@ -46,7 +46,7 @@ public class Baraka extends Player {
      * @return абсолютный путь к изображению персонажа
      */
     public String getIconSource() {
-        return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Baraka_in_MK1.png";
+        return "/Baraka_in_MK1.png";
     }
 
     /**

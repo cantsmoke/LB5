@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,8 +43,8 @@ public class ExcelManager {
     public static void writeToExcel(String playerName, int playerScore) {
         String filePath = "C:\\Users\\Arseniy\\Desktop\\Results.xlsx";
         try {
-            FileInputStream fis = new FileInputStream(filePath);
-            Workbook workbook = new XSSFWorkbook(fis);
+            InputStream is = ExcelManager.class.getResourceAsStream("/Results.xlsx");
+            Workbook workbook = new XSSFWorkbook(is);
             Sheet sheet = workbook.getSheetAt(0);
             List<Row> rows = new ArrayList<>();
             for (Row row : sheet) {
@@ -82,7 +83,7 @@ public class ExcelManager {
                 row.createCell(1).setCellValue(entries.get(i).score);
             }
 
-            fis.close();
+            is.close();
 
             FileOutputStream fos = new FileOutputStream(filePath);
             workbook.write(fos);
@@ -105,8 +106,8 @@ public class ExcelManager {
      */
     public static List<Integer> loadTop10ScoresFromExcel() {
         List<Integer> scores = new ArrayList<>();
-        try (FileInputStream fis = new FileInputStream(new File("C:\\Users\\Arseniy\\Desktop\\Results.xlsx"));
-            Workbook workbook = new XSSFWorkbook(fis)) {
+        try (InputStream is = ExcelManager.class.getResourceAsStream("/Results.xlsx");
+            Workbook workbook = new XSSFWorkbook(is)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue;
@@ -131,7 +132,8 @@ public class ExcelManager {
      */
     public static List<String[]> loadTop10TableFromExcel() {
         List<String[]> top10 = new ArrayList<>();
-        try (FileInputStream fis = new FileInputStream("C:\\Users\\Arseniy\\Desktop\\Results.xlsx"); Workbook workbook = new XSSFWorkbook(fis)) {
+        try (InputStream is = ExcelManager.class.getResourceAsStream("/Results.xlsx");
+         Workbook workbook = new XSSFWorkbook(is)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
                 String name = row.getCell(0).getStringCellValue();

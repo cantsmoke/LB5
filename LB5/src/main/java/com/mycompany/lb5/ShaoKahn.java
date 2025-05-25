@@ -22,7 +22,7 @@ public class ShaoKahn extends Player{
     
     @Override
     public String getIconSource(){
-        return "C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Шао_Кан_(MK11).png";
+        return "/Шао_Кан_(MK11).png";
     }
 
     @Override

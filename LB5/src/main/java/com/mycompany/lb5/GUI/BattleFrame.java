@@ -166,11 +166,11 @@ public class BattleFrame extends JFrame {
         panel.add(Box.createVerticalStrut(10));
         ImageIcon icon = null;
         if(isHuman) {
-            icon = new ImageIcon("C:\\Users\\Arseniy\\Documents\\GitHub\\LB5\\Kitana_in_MK1.png");
+            icon = new ImageIcon(getClass().getResource(human.getIconSource()));
             playerIconLabel = new JLabel("Текст", icon, JLabel.CENTER);
             panel.add(playerIconLabel);
         } else {
-            icon = new ImageIcon(player.getIconSource());
+            icon = new ImageIcon(getClass().getResource(enemy.getIconSource()));
             enemyIconLabel = new JLabel("Текст", icon, JLabel.CENTER);
             panel.add(enemyIconLabel);
         }
