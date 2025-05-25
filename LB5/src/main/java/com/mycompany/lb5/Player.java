@@ -7,7 +7,9 @@ package com.mycompany.lb5;
 import java.util.ArrayList;
 import java.util.List;
 /**
- *
+ * Абстрактный класс, представляющий базового игрока (персонажа или врага) в игре.
+ * Содержит общие характеристики и поведение, наследуется конкретными классами персонажей.
+ * 
  * @author Арсений
  */
 public abstract class Player {
@@ -23,7 +25,14 @@ public abstract class Player {
     private boolean skipNextDebuffTurn = false;
     private boolean stunned = false;
     ArrayList<ActionType> playerActionsHistory = new ArrayList<>();
-
+    
+    /**
+     * Конструктор, инициализирующий базовые параметры игрока.
+     * 
+     * @param level уровень игрока
+     * @param health начальное здоровье и максимальное здоровье
+     * @param damage начальный урон и максимальный урон
+     */
     public Player(int level, int health, int damage) {
         this.level = level;
         this.health = health;
@@ -57,6 +66,13 @@ public abstract class Player {
         this.health = health;
     }
     
+    /**
+     * Восстанавливает здоровье игрока с помощью предмета (Item).
+     * Лечит на коэффициент от максимального здоровья, заданный предметом.
+     * При этом здоровье не превышает максимальное.
+     * 
+     * @param item предмет, с помощью которого игрок лечится
+     */
     public void heal(Item item){
         double hu = item.getHealKF();
         this.health = (int) (health + maxHealth * hu);
@@ -85,15 +101,31 @@ public abstract class Player {
         this.level++;
     }
     
+    /**
+     * Выполняет атаку противника.
+     * Записывает действие в историю.
+     * 
+     * @return урон для нанесения противнику
+     */
     public int attackEnemy(){
         playerActionsHistory.add(ActionType.ATTACK);
         return this.damage;
     }
     
+    
+    /**
+     * Защищается от атаки противника.
+     * Записывает действие в историю.
+     */
     public void defendFromEnemy(){
         playerActionsHistory.add(ActionType.DEFEND);
     }
     
+    /**
+     * Возвращает количество атак, совершенных игроком.
+     * 
+     * @return количество атак
+     */
     public int getAttackCount() {
         int attackCount = 0;
         for (ActionType action : playerActionsHistory) {
@@ -103,7 +135,12 @@ public abstract class Player {
         }
         return attackCount;
     }
-
+    
+    /**
+     * Возвращает количество защитных действий игрока.
+     * 
+     * @return количество защит
+     */
     public int getDefendCount() {
         int defendCount = 0;
         for (ActionType action : playerActionsHistory) {
@@ -133,7 +170,15 @@ public abstract class Player {
     public void setSkipNextDebuffTurn(boolean skipNextDebuffTurn) {
         this.skipNextDebuffTurn = skipNextDebuffTurn;
     }
- 
+    
+    /**
+     * Накладывает дебафф на игрока от источника (другого игрока).
+     * Уменьшает урон игрока вдвое, увеличивает урон источника на 25%.
+     * Задает длительность дебаффа в зависимости от уровня источника.
+     * Игрок пропускает следующий ход.
+     * 
+     * @param source игрок, который накладывает дебафф
+     */
     public void setDebuff(Player source) {
         this.debuffTurnDuration += source.getLevel();
         this.setDamage((int)(this.getDamage() * 0.5));
@@ -145,6 +190,11 @@ public abstract class Player {
         this.debuffTurnDuration++;
     }
     
+    /**
+     * Сбрасывает дебафф и восстанавливает исходный урон для обоих игроков.
+     * 
+     * @param player игрок, который наложил дебафф
+     */
     public void resetDebuff(Player player){
         this.setDamage(this.getMaxDamage());
         player.setDamage(player.getMaxDamage());
@@ -156,6 +206,9 @@ public abstract class Player {
         return this.debuffTurnDuration;
     }
     
+    /**
+     * Уменьшает длительность дебаффа на 1 ход, если дебафф активен.
+     */
     public void reduceDebuffDuration(){
         if (debuffTurnDuration != 0){
             debuffTurnDuration--;

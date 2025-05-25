@@ -4,11 +4,30 @@
  */
 package com.mycompany.lb5;
 /**
- *
+ * Класс {@code CharacterAction} содержит статические методы,
+ * определяющие поведение врагов в бою на основе анализа действий игрока.
+ * Используется для реализации ИИ-противников с адаптивной стратегией.
+ * <p>
+ * Методы анализируют агрессивность и защитную тактику игрока и 
+ * соответственно выбирают тип действия (атака, защита, лечение, дебафф).
+ * </p>
+ * 
  * @author Арсений
  */
 public class CharacterAction {
-    
+     /**
+     * Выбирает тип действия (атака или защита) на основе вероятностей
+     * и поведения игрока (количества атак и защит).
+     * <p>
+     * Для первых 15 действий применяется базовое вероятностное поведение,
+     * после чего поведение врага подстраивается под стиль игрока.
+     * </p>
+     *
+     * @param attackProbability базовая вероятность атаки (в процентах)
+     * @param defendProbability базовая вероятность защиты (в процентах)
+     * @param human объект игрока, чье поведение анализируется
+     * @return {@link ActionType#ATTACK} или {@link ActionType#DEFEND}
+     */
     public static ActionType adaptiveBehaviourChooser(int attackProbability, int defendProbability, Player human){
         int attackCount = human.getAttackCount();
         int defendCount = human.getDefendCount();
@@ -29,7 +48,16 @@ public class CharacterAction {
             return Math.random() < normAttack ? ActionType.ATTACK : ActionType.DEFEND;
         }
     }
-
+    
+    /**
+     * Определяет поведение врага в бою на основе его типа и состояния игрока.
+     * Для каждого типа врага используется своя стратегия выбора действия,
+     * включая вероятности дебаффа и лечения.
+     *
+     * @param human игрок, против которого действует враг
+     * @param enemy враг, поведение которого выбирается
+     * @return выбранное действие врага в виде {@link ActionType}
+     */
     public static ActionType ChooseEnemyBehavior(Player human, Player enemy) {
         ActionType enemyAction = null;
         if (enemy instanceof Baraka) {
@@ -59,5 +87,4 @@ public class CharacterAction {
         }
         return enemyAction;
     }
-
 }

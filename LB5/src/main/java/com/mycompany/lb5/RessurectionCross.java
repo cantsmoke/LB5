@@ -4,7 +4,10 @@
  */
 package com.mycompany.lb5;
 /**
- *
+ * Класс, представляющий предмет "Крест воскрешения".
+ * Реализует интерфейс Item.
+ * Воскрешение восстанавливает небольшой процент здоровья.
+ * 
  * @author Arseniy
  */
 public class RessurectionCross implements Item{
@@ -13,7 +16,13 @@ public class RessurectionCross implements Item{
     public String getName() {
         return "Крест воскрешения";
     }
-
+    
+    /**
+     * Возвращает коэффициент лечения.
+     * В данном случае восстанавливает 5% от максимального здоровья.
+     * 
+     * @return коэффициент лечения (0.05)
+     */
     @Override
     public double getHealKF() {
         return 0.05;

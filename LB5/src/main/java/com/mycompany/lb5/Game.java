@@ -8,14 +8,26 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 /**
- *
+ * Класс Game отвечает за создание и управление врагами и игроком,
+ * а также за инициализацию боя.
+ * 
  * @author Арсения
  */
 public class Game {
     
+    /** Массив шаблонов врагов разных типов для текущей локации */
     private static Player enemies[] = new Player[4];
+    /** Объект боя, управляющий логикой пошагового сражения */
     public Fight fight = new Fight();
     
+    /**
+     * Генерирует список врагов для текущей локации в зависимости от уровня игрока.
+     * Для каждого шаблона врага обновляет характеристики под уровень игрока.
+     * Затем создаёт список врагов, включая нескольких случайных и одного босса.
+     * 
+     * @param playerLevel уровень игрока
+     * @return список врагов для локации
+     */
     public List<Player> generateEnemiesForLocation(int playerLevel) {
         setEnemies();
         for(Player enemy: enemies){
@@ -30,24 +42,43 @@ public class Game {
         enemies.add(boss);
         return enemies;
     }
-
+    
+    /**
+     * Создаёт нового босса с помощью фабрики врагов.
+     * 
+     * @return объект босса
+     */
     public Player NewBoss(){
         Player boss = makeBoss();
         return boss;
     }
-
+    
+    /**
+     * Создаёт нового врага случайного типа.
+     * 
+     * @return объект врага
+     */
     public Player NewEnemy() {
         Player enemy = ChooseEnemy();
         return enemy;
     }
     
+    /**
+     * Инициализирует массив шаблонов врагов всех типов.
+     * Вызывается перед генерацией врагов для локации.
+     */
     public static void setEnemies() {
         enemies[0] = EnemyFactory.createEnemy(EnemyType.TANK);      
         enemies[1] = EnemyFactory.createEnemy(EnemyType.MAGICIAN);      
         enemies[2] = EnemyFactory.createEnemy(EnemyType.FIGHTER);      
         enemies[3] = EnemyFactory.createEnemy(EnemyType.SOLDIER);   
     }
-
+    
+    /**
+     * Случайным образом выбирает одного из шаблонных врагов из массива enemies.
+     * 
+     * @return объект врага выбранного типа
+     */
     public Player ChooseEnemy() {
         int randomEnemyIndex = (int) (Math.random() * 4);
         Player enemy = null;
@@ -68,10 +99,20 @@ public class Game {
         return enemy;
     }
     
+    /**
+     * Создаёт босса с помощью фабрики врагов.
+     * 
+     * @return объект босса
+     */
     public Player makeBoss(){
         return EnemyFactory.createEnemy(EnemyType.BOSS);
     }
     
+    /**
+     * Создаёт нового игрока (человека) с начальными параметрами.
+     * 
+     * @return объект игрока
+     */
     public Human NewHuman(){
         Human human = new Human (0, 100, 50);
         return human;

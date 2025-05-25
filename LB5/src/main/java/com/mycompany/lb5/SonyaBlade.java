@@ -4,11 +4,21 @@
  */
 package com.mycompany.lb5;
 /**
- *
+ * Класс, представляющий персонажа Sonya Blade.
+ * Наследуется от абстрактного класса Player.
+ * Реализует уникальные характеристики и методы персонажа.
+ * 
  * @author Арсений
  */
 public class SonyaBlade extends Player{
-    
+    /**
+     * Конструктор класса SonyaBlade.
+     * Инициализирует уровень, здоровье и урон персонажа.
+     * 
+     * @param level  уровень персонажа
+     * @param health  начальное здоровье персонажа
+     * @param damage  базовый урон персонажа
+     */
     public SonyaBlade (int level, int health, int  damage){
         super (level, health, damage);
     }
@@ -32,7 +42,13 @@ public class SonyaBlade extends Player{
     public int returnExperienceForWin() {
         return 20;
     }
-
+    
+    /**
+     * Обновляет характеристики персонажа на основе уровня игрока.
+     * Устанавливает здоровье и урон в зависимости от переданного уровня.
+     * 
+     * @param playerLevel текущий уровень игрока
+     */
     @Override
     public void updateCharacteristicsBasedOnLevel(int playerLevel) {
         this.level = playerLevel;

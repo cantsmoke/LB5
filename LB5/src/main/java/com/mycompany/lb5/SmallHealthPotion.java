@@ -4,7 +4,9 @@
  */
 package com.mycompany.lb5;
 /**
- *
+ * Малое зелье лечения.
+ * Восстанавливает 25% от максимального здоровья.
+ * 
  * @author Arseniy
  */
 public class SmallHealthPotion implements Item{

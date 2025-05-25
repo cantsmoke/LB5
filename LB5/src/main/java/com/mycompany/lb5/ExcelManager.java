@@ -18,11 +18,27 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
- *
+ * Класс {@code ExcelManager} отвечает за чтение и запись результатов игроков
+ * в файл Excel, расположенный по фиксированному пути.
+ * <p>
+ * Поддерживает запись нового результата, а также загрузку топ-10 результатов
+ * в виде списка очков или таблицы с именами и очками.
+ * </p>
+ * <p>
+ * Для работы требуется библиотека Apache POI.
+ * </p>
+ * 
  * @author Arseniy
  */
 public class ExcelManager {
-    
+    /**
+     * Записывает результат игрока в Excel-файл. Если в файле уже есть записи,
+     * новые результаты добавляются, сортируются по убыванию очков,
+     * и сохраняются только топ-10.
+     *
+     * @param playerName имя игрока
+     * @param playerScore очки игрока
+     */
     public static void writeToExcel(String playerName, int playerScore) {
         String filePath = "C:\\Users\\Arseniy\\Desktop\\Results.xlsx";
         try {
@@ -78,6 +94,15 @@ public class ExcelManager {
         }
     }
 
+     /**
+     * Загружает из Excel-файла топ-10 очков игроков.
+     * <p>
+     * Если в файле меньше 10 записей, возвращается доступное количество.
+     * В случае ошибок чтения выводится сообщение об ошибке и возвращается пустой список.
+     * </p>
+     *
+     * @return список топ-10 очков игроков в порядке убывания
+     */
     public static List<Integer> loadTop10ScoresFromExcel() {
         List<Integer> scores = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(new File("C:\\Users\\Arseniy\\Desktop\\Results.xlsx"));
@@ -98,6 +123,12 @@ public class ExcelManager {
         return scores.size() > 10 ? scores.subList(0, 10) : scores;
     }
     
+    /**
+     * Загружает из Excel-файла топ-10 игроков с их очками в виде списка массивов
+     * строк, где каждый массив содержит имя игрока и очки.
+     *
+     * @return список из массивов {@code String[]}, содержащих имя и очки
+     */
     public static List<String[]> loadTop10TableFromExcel() {
         List<String[]> top10 = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream("C:\\Users\\Arseniy\\Desktop\\Results.xlsx"); Workbook workbook = new XSSFWorkbook(fis)) {

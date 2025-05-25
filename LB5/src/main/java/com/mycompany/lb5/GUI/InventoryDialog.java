@@ -3,17 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-/**
- *
- * @author Arseniy
- */
+
 import com.mycompany.lb5.BigHealthPotion;
 import com.mycompany.lb5.Inventory;
 import com.mycompany.lb5.SmallHealthPotion;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-
+/**
+ * Диалоговое окно для отображения и использования предметов из инвентаря игрока.
+ * Наследуется от JDialog и блокирует родительское окно BattleFrame до закрытия.
+ * 
+ * Позволяет выбрать предмет из списка и применить его действие.
+ * 
+ * @author Арсений
+ */
 public class InventoryDialog extends JDialog {
 
     private JList<String> itemsList;
@@ -30,6 +34,12 @@ public class InventoryDialog extends JDialog {
         setupActions();
     }
 
+    /**
+     * Инициализация компонентов окна:
+     * - Список предметов
+     * - Кнопка "Использовать"
+     * - Панель для кнопки
+     */
     private void initializeComponents() {
         itemsList = new JList<>(parentFrame.getHuman().getInventory().getInventoryInfo());
         itemsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -48,6 +58,12 @@ public class InventoryDialog extends JDialog {
         btnUseItem.addActionListener(this::onUseItemClicked);
     }
     
+    /**
+     * Обработчик нажатия кнопки "Использовать".
+     * Пытается применить выбранный предмет из инвентаря.
+     * 
+     * @param e объект события нажатия кнопки
+     */
     public void onUseItemClicked(ActionEvent e) {
         String selectedItem = itemsList.getSelectedValue();
 

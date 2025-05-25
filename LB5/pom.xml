@@ -5,22 +5,61 @@
     <artifactId>LB5</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.6.3</version>
+            <configuration> <!-- не обязательно -->
+              <encoding>UTF-8</encoding>
+              <locale>ru_RU</locale>
+              <docencoding>UTF-8</docencoding>
+              <charset>UTF-8</charset>
+            </configuration>
+          </plugin>
+          <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-assembly-plugin</artifactId>
+                     <version>2.4</version>
+                     <configuration>
+                         <descriptorRefs>
+                             <descriptorRef>jar-with-dependencies</descriptorRef>
+                         </descriptorRefs>
+                         <archive>
+                         <manifest>
+                                 <mainClass>com.mycompany.LB5</mainClass>
+                             </manifest>
+                         </archive>
+                     </configuration>
+                     <executions>
+                         <execution>
+                             <id>make-assembly</id>
+                             <phase>package</phase>
+                             <goals>                         
+                                 <goal>single</goal>
+                             </goals>
+                         </execution>
+                     </executions>
+                 </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi-ooxml</artifactId>
-        <version>5.2.0</version>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.0</version>
+            </dependency>
+                <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.20.0</version>
         </dependency>
-            <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-api</artifactId>
-        <version>2.20.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-core</artifactId>
-        <version>2.20.0</version>
-    </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.20.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

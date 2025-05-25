@@ -3,17 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-/**
- *
- * @author Arseniy
- */
+
 import com.mycompany.lb5.ExcelManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
-
+/**
+ * Диалоговое окно для отображения таблицы рекордов (топ-10).
+ * Данные загружаются из Excel через ExcelManager.
+ * В окне есть JTable для отображения результатов и кнопка "Закрыть".
+ * При закрытии окна создаётся и показывается главное окно MainFrame.
+ * 
+ * @author Арсений
+ */
 public class ScoreboardDialog extends JDialog {
 
     private JButton btnClose;
@@ -28,7 +32,11 @@ public class ScoreboardDialog extends JDialog {
         initializeComponents();
         setupActions();
     }
-
+    
+    /**
+     * Создание таблицы и кнопки, добавление их на форму.
+     * Загружает данные из ExcelManager и формирует массив для JTable.
+     */
     private void initializeComponents() {
         List<String[]> scoreDataList = ExcelManager.loadTop10TableFromExcel();
         String[][] scoreData = new String[scoreDataList.size()][3];

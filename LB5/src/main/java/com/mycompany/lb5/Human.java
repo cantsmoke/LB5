@@ -4,8 +4,8 @@
  */
 package com.mycompany.lb5;
 /**
- *
- * @author Арсений
+ * Класс Human расширяет Player и представляет игрока-человека в игре.
+ * Включает дополнительные поля, такие как очки, опыт, количество побед и инвентарь.
  */
 public class Human extends Player{
     
@@ -34,9 +34,7 @@ public class Human extends Player{
     public int getExperience(){
         return this.experience;
     }
-    public int getRequiredExperience(){
-        return this.nextexperience;
-    }
+
     public int getWin(){
         return this.win;
     }
@@ -69,7 +67,7 @@ public class Human extends Player{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public int getRequiredExperiance() {
+    public int getRequiredExperience() {
         return this.nextexperience;
     }
 

@@ -3,17 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-/**
- *
- * @author Arseniy
- */
+
 import com.mycompany.lb5.ExcelManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Collections;
-
+/**
+ * Диалоговое окно, которое появляется при победе игрока на локации.
+ * Показывает сообщение о победе и кнопку "Дальше" для перехода к следующей локации
+ * или завершению игры с выводом результата и возможностью занести его в топ-10.
+ * 
+ * @author Арсений
+ */
 public class WinDialog extends JDialog {
 
     private JButton btnNext;
@@ -28,7 +31,10 @@ public class WinDialog extends JDialog {
         initializeComponents();
         setupActions();
     }
-
+    
+    /**
+     * Создание и размещение компонентов: метка с сообщением и кнопка.
+     */
     private void initializeComponents() {
         JLabel messageLabel = new JLabel("Вы одержали победу в локации №" + parentFrame.getCurrentLocation() + " из " + parentFrame.getTotalLocations() + " !", SwingConstants.CENTER);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -44,6 +50,11 @@ public class WinDialog extends JDialog {
         btnNext.addActionListener(this::onNextClicked);
     }
     
+    /**
+     * Логика при нажатии кнопки "Дальше":
+     * Если есть еще локации — создается новое окно битвы с новой локацией.
+     * Если все локации пройдены — отображается итог и возможность сохранить результат.
+     */
     public void onNextClicked(ActionEvent e) {
         System.out.println("Кнопка 'Далее' нажата.");
         dispose();
@@ -87,6 +98,13 @@ public class WinDialog extends JDialog {
         }
     }
     
+     /**
+     * Метод определения позиции игрока в топ-10 по результатам.
+     * Возвращает позицию (1..10) или -1 если игрок не попадает в топ.
+     * 
+     * @param playerScore текущий результат игрока
+     * @return позиция в топ-10, или -1 если нет
+     */
     private int getTop10Position(int playerScore) {
         List<Integer> topScores = ExcelManager.loadTop10ScoresFromExcel();
         int position = 0;
@@ -106,6 +124,12 @@ public class WinDialog extends JDialog {
         return position + 1;
     }
     
+    /**
+     * Получить минимальное значение из списка.
+     * @param list список чисел
+     * @return минимальное значение
+     * @throws IllegalArgumentException если список пустой или null
+     */
     public int getMin(List<Integer> list) {
         if (list == null || list.isEmpty()) {
             throw new IllegalArgumentException("Список пуст или null");

@@ -4,7 +4,9 @@
  */
 package com.mycompany.lb5;
 /**
- *
+ * Класс, представляющий босса Shao Kahn.
+ * Характеристики зависят от уровня игрока + 2.
+ * 
  * @author Арсений
  */
 public class ShaoKahn extends Player{

@@ -3,10 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-/**
- *
- * @author Арсений
- */
+
 import com.mycompany.lb5.ActionType;
 import com.mycompany.lb5.BigHealthPotion;
 import com.mycompany.lb5.Game;
@@ -19,7 +16,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
-
+/**
+ * Класс {@code BattleFrame} представляет собой окно пошагового боя между игроком (объектом {@link Human})
+ * и списком врагов ({@link Player}). Отображает здоровье, урон, уровень и состояния игроков, 
+ * а также предоставляет кнопки для действий игрока: атака, защита, дебафф и использование предметов.
+ * 
+ * <p>Класс также обрабатывает переход к следующему врагу после победы, получение опыта, предметов,
+ * и обработку проигрыша с возможностью воскрешения.</p>
+ *
+ * <p>Ключевые функции:</p>
+ * <ul>
+ *     <li>Обработка логики боя (атака, защита, дебафф)</li>
+ *     <li>Обновление интерфейса в реальном времени</li>
+ *     <li>Отображение опыта, состояния, побед, уровней и получаемых предметов</li>
+ *     <li>Переход между врагами в рамках одной локации</li>
+ *     <li>Уровневый рост игрока</li>
+ * </ul>
+ * 
+ * @author 
+ */
 public class BattleFrame extends JFrame {
 
     private JButton btnAttack;
@@ -74,7 +89,12 @@ public class BattleFrame extends JFrame {
     public Game getGame(){
         return this.game;
     }
-
+    
+    /**
+    * Инициализирует и размещает основные визуальные компоненты окна боя:
+    * заголовок, панели игрока и врага, центральную панель с логом и индикаторами,
+    * а также нижнюю панель с кнопками действий.
+    */
     private void initializeComponents() {
         JLabel fightLabel = new JLabel("FIGHT; " + "Location №" + currentLocation, SwingConstants.CENTER);
         fightLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -101,7 +121,14 @@ public class BattleFrame extends JFrame {
         btnDebuff.setEnabled(enemy.getDebuff() == 0 && human.getLevel() != 0);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-
+    
+    /**
+    * Создает панель с информацией об игроке или враге.
+    *
+    * @param player Объект игрока или врага.
+    * @param isHuman true, если панель создается для игрока; false — для врага.
+    * @return JPanel с визуальным представлением игрока/врага.
+    */
     private JPanel createPlayerPanel(Player player, boolean isHuman) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -151,12 +178,18 @@ public class BattleFrame extends JFrame {
         return panel;
     }
     
+    /**
+    * Создает центральную панель, содержащую лог событий, индикаторы очков, опыта
+    * и текущего состояния боя (чей ход, оглушение).
+    *
+    * @return JPanel, содержащая лог боя и индикаторы состояния.
+    */
     private JPanel createCenterPanel() {
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
         playerScoreLabel = new JLabel("Очки: " + human.getPoints());
-        playerExpLabel = new JLabel("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
+        playerExpLabel = new JLabel("Опыт: " + human.getExperience() + "/" + human.getRequiredExperience());
         JPanel topRow = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topRow.add(playerScoreLabel);
         topRow.add(Box.createHorizontalStrut(16));
@@ -183,14 +216,22 @@ public class BattleFrame extends JFrame {
 
         return center;
     }
-
+    
+    /**
+    * Привязывает обработчики действий к кнопкам: атака, защита, ослабление, предметы.
+    */
     private void setupActions() {
         btnAttack.addActionListener(this::onAttackClicked);
         btnDefend.addActionListener(this::onDefendClicked);
         btnDebuff.addActionListener(this::onDebuffClicked);
         btnItems.addActionListener(this::onItemsClicked);
     }
-
+    
+    /**
+    * Обновляет все визуальные элементы, отражающие текущее состояние игроков:
+    * здоровье, уровень, урон, статус оглушения и доступность кнопки "Ослабить".
+    * Также изменяет цвет полосы здоровья в зависимости от текущего состояния.
+    */
     void updateLabels() {
         playerHpBar.setValue(human.getHealth());
         enemyHpBar.setValue(enemy.getHealth());
@@ -224,7 +265,14 @@ public class BattleFrame extends JFrame {
             human.getLevel() != 0
         );
     }
-
+    
+    /**
+    * Обработчик нажатия кнопки "Атаковать".
+    * Выполняет атаку игрока, обновляет интерфейс, обрабатывает эффекты дебаффов,
+    * проверяет условия победы и поражения, а также переключает ход.
+    *
+    * @param e Событие нажатия кнопки.
+    */
     public void onAttackClicked(ActionEvent e) {
         updateLabels();
         String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.ATTACK);
@@ -247,7 +295,13 @@ public class BattleFrame extends JFrame {
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
     }
    
-
+    /**
+    * Обработчик нажатия кнопки "Защититься".
+    * Выполняет действие защиты, обновляет интерфейс, учитывает пропуск снижения дебаффа
+    * при определённых условиях, проверяет условия победы и поражения.
+    *
+    * @param e Событие нажатия кнопки.
+    */
     public void onDefendClicked(ActionEvent e) {
         updateLabels();    
         String battleLog = game.fight.performPlayerAction(human, enemy, ActionType.DEFEND);
@@ -276,6 +330,12 @@ public class BattleFrame extends JFrame {
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
     }
     
+    /**
+    * Обработчик нажатия кнопки "Ослабить".
+    * Выполняет дебафф противника, обновляет интерфейс и проверяет условия окончания боя.
+    *
+    * @param e Событие нажатия кнопки.
+    */
     private void onDebuffClicked(ActionEvent e) {
         updateLabels();
         
@@ -289,12 +349,22 @@ public class BattleFrame extends JFrame {
         turnLabel.setText("Ход игрока: " + game.fight.getIsPlayerTurn());
     }
     
+    /**
+    * Обработчик нажатия кнопки "Предметы".
+    * Открывает диалоговое окно инвентаря и обновляет интерфейс после возможного применения предметов.
+    *
+    * @param e Событие нажатия кнопки.
+    */
     public void onItemsClicked(ActionEvent e) {
         InventoryDialog inventoryDialog = new InventoryDialog(this);
         inventoryDialog.setVisible(true);
         updateLabels();
     }
     
+    /**
+    * Проверяет условие победы игрока: если здоровье врага <= 0,
+    * начисляет очки, опыт, дропает предметы, запускает следующего врага или завершает игру.
+    */
     private void checkWinCondition() {
         if (enemy.getHealth() <= 0) {
             human.addWin();
@@ -309,7 +379,7 @@ public class BattleFrame extends JFrame {
             
             human.gainExperience(enemy.returnExperienceForWin());
             checkLevelUpdate();
-            playerExpLabel.setText("Опыт: " + human.getExperience() + "/" + human.getRequiredExperiance());
+            playerExpLabel.setText("Опыт: " + human.getExperience() + "/" + human.getRequiredExperience());
             processItemDrop();
             logArea.setText("");
             if (currentEnemyIndex < enemyList.size()) {
@@ -325,6 +395,11 @@ public class BattleFrame extends JFrame {
         }
     }
     
+    /**
+    * Обрабатывает выпадение предметов после победы.
+    * Шанс выпадения зависит от типа врага. Возможные предметы:
+    * малое зелье лечения, большое зелье лечения и крест возрождения.
+    */
     private void processItemDrop() {
         double smallPotionDropP = Math.random();
         double bigPotionDropP = Math.random();
@@ -345,8 +420,12 @@ public class BattleFrame extends JFrame {
         }
     }
 
+    /**
+    * Проверяет, достиг ли игрок нового уровня.
+    * Если достиг — повышает уровень, предлагает выбор улучшения и обновляет характеристики врагов.
+    */
     public void checkLevelUpdate(){
-        if (human.getExperience() >= human.getRequiredExperiance()){
+        if (human.getExperience() >= human.getRequiredExperience()){
             human.levelUp();
             showLevelUpDialog();
             human.setRequiredExperiance();
@@ -356,6 +435,10 @@ public class BattleFrame extends JFrame {
         }
     }
     
+    /**
+    * Отображает диалог повышения уровня, предлагая игроку выбор между увеличением урона и здоровья.
+    * Применяет выбранное улучшение и обновляет интерфейс.
+    */
     private void showLevelUpDialog() {
         Object[] options = {"Увеличить урон (+20%)", "Увеличить здоровье (+25%)"};
         int choice = JOptionPane.showOptionDialog(null,
@@ -375,6 +458,11 @@ public class BattleFrame extends JFrame {
         updateLabels();
     }
 
+    /**
+    * Проверяет условие поражения игрока.
+    * Если здоровье игрока <= 0, пытается использовать крест воскрешения.
+    * Если не удалось воскреснуть — сбрасывает битву.
+    */
     private void checkLoseCondition() {
         if (human.getHealth() <= 0) {
             boolean resurrected = tryRessurection();
@@ -387,6 +475,12 @@ public class BattleFrame extends JFrame {
         }
     }
     
+    /**
+    * Пытается воскресить игрока, если в инвентаре есть крест воскрешения.
+    * Восстанавливает 5% от максимального здоровья. Показывает сообщение о воскрешении.
+    *
+    * @return true, если воскрешение произошло, иначе false.
+    */
     private boolean tryRessurection() {
         if (human.getInventory().getRessurectionCrossCount() > 0) {
             RessurectionCross ressurectionCross = human.getInventory().getRessurectionCross();
@@ -400,7 +494,12 @@ public class BattleFrame extends JFrame {
         }
         return false;
     }
-
+    
+    /**
+    * Сбрасывает состояние боя: восстанавливает здоровье, урон, статус,
+    * иконки, полоски здоровья, и очищает лог. Применяется при начале новой битвы
+    * или после воскрешения/поражения.
+    */
     private void resetBattle() {
         human.setHealth(human.getMaxHealth());
         enemy.setHealth(enemy.getMaxHealth());

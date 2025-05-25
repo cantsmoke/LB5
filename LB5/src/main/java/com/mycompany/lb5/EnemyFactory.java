@@ -4,10 +4,22 @@
  */
 package com.mycompany.lb5;
 /**
- *
+ * Класс {@code EnemyFactory} реализует фабричный метод для создания врагов
+ * различных типов на основе перечисления {@link EnemyType}.
+ * <p>
+ * Используется для инкапсуляции логики создания объектов врагов с начальными параметрами.
+ * </p>
+ * 
  * @author Арсений
  */
 public class EnemyFactory {
+    /**
+     * Создаёт объект врага соответствующего типа с предопределёнными характеристиками.
+     *
+     * @param type тип врага, указанный в {@link EnemyType}
+     * @return экземпляр {@link Player}, представляющий врага
+     * @throws IllegalArgumentException если передан неизвестный тип врага
+     */
     public static Player createEnemy(EnemyType type) {
         switch (type) {
             case TANK:

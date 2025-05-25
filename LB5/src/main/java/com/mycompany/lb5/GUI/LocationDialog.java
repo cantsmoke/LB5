@@ -3,17 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.lb5.GUI;
-/**
- *
- * @author Арсений
- */
+
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * Диалоговое окно для выбора количества локаций.
+ * Пользователь вводит число от 1 до 10.
+ * Если введено корректное число — диалог закрывается и результат можно получить через геттеры.
+ * 
+ * Наследуется от JDialog, является модальным, блокирует родительское окно.
+ * 
+ * @author Арсений
+ */
 public class LocationDialog extends JDialog {
     private int locations = -1;
     private boolean confirmed = false;
-
+    /**
+     * Конструктор диалога.
+     * @param parent родительское окно (обычно JFrame)
+     */
     public LocationDialog(JFrame parent) {
         super(parent, "Выберите количество локаций", true);
         setSize(350, 150);
