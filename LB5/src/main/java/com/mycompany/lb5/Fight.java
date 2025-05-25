@@ -23,27 +23,34 @@ public class Fight {
     }
 
     public String performPlayerAction(Player human, Player enemy, ActionType action) {
-        String battleLog = null;
-        switch (action) {
-            case ATTACK -> battleLog = processPlayersAttack(human, enemy);
-            case DEFEND -> battleLog = processPlayersDefend(human, enemy);
-            case DEBUFF -> battleLog = processPlayersDebuff(human, enemy);
+        String battleLog = "";
+        if (isPlayersTurn && human.isStunned()){
+            battleLog = processPlayersStun(human, enemy);
+        } else {
+            switch (action) {
+                case ATTACK -> battleLog = processPlayersAttack(human, enemy);
+                case DEFEND -> battleLog = processPlayersDefend(human, enemy);
+                case DEBUFF -> battleLog = processPlayersDebuff(human, enemy);
+            }
         }
         return battleLog;
     }
-
+    
+    private String processPlayersStun(Player human, Player enemy){
+        StringBuilder log = new StringBuilder();
+        log.append("Игрок пропускает ход из-за оглушения!\n");
+        ActionType enemyBehaviour = ActionType.ATTACK;
+        log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
+        human.setHealth(human.getHealth() - enemy.attackEnemy());
+        human.setStunned(false);
+        isPlayersTurn = FALSE;
+        log.append("-----------------\n");
+        return log.toString();
+    }
+    
     private String processPlayersAttack(Player human, Player enemy) {
         StringBuilder log = new StringBuilder();    
-        if (isPlayersTurn && human.isStunned()) {
-            log.append("Игрок пропускает ход из-за оглушения!\n");
-            ActionType enemyBehaviour = ActionType.ATTACK;
-            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
-            human.setHealth(human.getHealth() - enemy.attackEnemy());
-            human.setStunned(false);
-            isPlayersTurn = FALSE;
-            log.append("-----------------\n");
-            return log.toString();
-        } else if (!isPlayersTurn && enemy.isStunned()) {
+        if (!isPlayersTurn && enemy.isStunned()) {
             log.append("Противник пропускает ход из-за оглушения!\n");
             enemy.setHealth(enemy.getHealth() - (int) (human.attackEnemy()));
             enemy.setStunned(false);
@@ -111,16 +118,7 @@ public class Fight {
 
     private String processPlayersDefend(Player human, Player enemy) {
         StringBuilder log = new StringBuilder();
-        if (isPlayersTurn && human.isStunned()) {
-            log.append("Игрок пропускает ход из-за оглушения!\n");
-            ActionType enemyBehaviour = ActionType.ATTACK;
-            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
-            human.setHealth(human.getHealth() - enemy.attackEnemy());
-            human.setStunned(false);
-            isPlayersTurn = FALSE;
-            log.append("-----------------\n");
-            return log.toString();
-        } else if (!isPlayersTurn && enemy.isStunned()) {
+        if (!isPlayersTurn && enemy.isStunned()) {
             log.append("Противник пропускает ход из-за оглушения!\n");
             enemy.setStunned(false);
             isPlayersTurn = true;
@@ -213,16 +211,7 @@ public class Fight {
 
     private String processPlayersDebuff(Player human, Player enemy) {
         StringBuilder log = new StringBuilder();
-        if (isPlayersTurn && human.isStunned()) {
-            log.append("Игрок пропускает ход из-за оглушения!\n");
-            ActionType enemyBehaviour = ActionType.ATTACK;
-            log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
-            human.setHealth(human.getHealth() - enemy.attackEnemy());
-            human.setStunned(false);
-            isPlayersTurn = FALSE;
-            log.append("-----------------\n");
-            return log.toString();
-        } else if (!isPlayersTurn && enemy.isStunned()) {
+        if (!isPlayersTurn && enemy.isStunned()) {
             log.append("Противник пропускает ход из-за оглушения!\n");
             enemy.setDebuff(human);
             log.append("Враг ослаблен на ").append(human.getLevel()).append(" ходов!").append("\n");
@@ -234,7 +223,6 @@ public class Fight {
             ActionType enemyBehaviour = CharacterAction.ChooseEnemyBehavior(human, enemy);
             log.append("Противник выбрал: ").append(enemyBehaviour).append("\n");
             double debuffProbability = Math.random();
-
             switch (enemyBehaviour) {
                 case DEFEND:
                     if (isPlayersTurn){

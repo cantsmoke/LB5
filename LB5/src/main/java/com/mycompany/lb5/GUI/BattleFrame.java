@@ -194,12 +194,14 @@ public class BattleFrame extends JFrame {
     void updateLabels() {
         playerHpBar.setValue(human.getHealth());
         enemyHpBar.setValue(enemy.getHealth());
-        if(human.getHealth() < human.getMaxHealth() * 0.25)
+        if(human.getHealth() < human.getMaxHealth() * 0.25){
             playerHpBar.setForeground(Color.RED);
-        else if(enemy.getHealth() < enemy.getMaxHealth() * 0.25){  
-            enemyHpBar.setForeground(Color.RED);
         } else {
             playerHpBar.setForeground(Color.GREEN);
+        }
+        if(enemy.getHealth() < enemy.getMaxHealth() * 0.25){  
+            enemyHpBar.setForeground(Color.RED);
+        } else {
             enemyHpBar.setForeground(Color.GREEN);
         }
         if(enemy.getDebuff() != 0){
@@ -221,7 +223,6 @@ public class BattleFrame extends JFrame {
             enemy.getDebuff() == 0 &&
             human.getLevel() != 0
         );
-        
     }
 
     public void onAttackClicked(ActionEvent e) {
