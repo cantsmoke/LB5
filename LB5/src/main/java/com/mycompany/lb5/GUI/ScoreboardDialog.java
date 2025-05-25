@@ -63,7 +63,6 @@ public class ScoreboardDialog extends JDialog {
     }
 
     public void onCloseClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Закрыть' нажата.");
         dispose();
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);

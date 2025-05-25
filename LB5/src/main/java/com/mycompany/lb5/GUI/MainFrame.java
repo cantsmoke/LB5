@@ -95,7 +95,6 @@ public class MainFrame extends JFrame {
      * @param e событие нажатия
      */
     public void onShowResultsClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Посмотреть таблицу результатов' нажата.");
         ScoreboardDialog scoreboardDialog = new ScoreboardDialog(this);
         scoreboardDialog.setVisible(true);
     }

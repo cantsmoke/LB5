@@ -56,7 +56,6 @@ public class WinDialog extends JDialog {
      * Если все локации пройдены — отображается итог и возможность сохранить результат.
      */
     public void onNextClicked(ActionEvent e) {
-        System.out.println("Кнопка 'Далее' нажата.");
         dispose();
         if (parentFrame.getCurrentLocation() < parentFrame.getTotalLocations()) {
             parentFrame.getHuman().setDamage(parentFrame.getHuman().getMaxDamage());
