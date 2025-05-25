@@ -78,7 +78,6 @@ public class ExcelManager {
         }
     }
 
-
     public static List<Integer> loadTop10ScoresFromExcel() {
         List<Integer> scores = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(new File("C:\\Users\\Arseniy\\Desktop\\Results.xlsx"));

@@ -17,9 +17,9 @@ import java.util.Collections;
 public class WinDialog extends JDialog {
 
     private JButton btnNext;
-    private BattleFrame2 parentFrame;
+    private BattleFrame parentFrame;
     
-    public WinDialog(BattleFrame2 parentFrame) {
+    public WinDialog(BattleFrame parentFrame) {
         super(parentFrame, "Победа!", true);
         this.parentFrame = parentFrame;
         setSize(500, 200);
@@ -49,7 +49,7 @@ public class WinDialog extends JDialog {
         dispose();
         if (parentFrame.getCurrentLocation() < parentFrame.getTotalLocations()) {
             parentFrame.getHuman().setDamage(parentFrame.getHuman().getMaxDamage());
-            BattleFrame2 nextBattle = new BattleFrame2(
+            BattleFrame nextBattle = new BattleFrame(
                     parentFrame.getHuman(), 
                     parentFrame.getGame().generateEnemiesForLocation(parentFrame.getHuman().getLevel()), 
                     parentFrame.getGame(), 

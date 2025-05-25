@@ -18,9 +18,9 @@ public class InventoryDialog extends JDialog {
 
     private JList<String> itemsList;
     private JButton btnUseItem;
-    private BattleFrame2 parentFrame; 
+    private BattleFrame parentFrame; 
 
-    public InventoryDialog(BattleFrame2 parent) {
+    public InventoryDialog(BattleFrame parent) {
         super(parent, "Мешок предметов", true);
         this.parentFrame = parent;
         setSize(400, 300);

@@ -20,7 +20,7 @@ import java.awt.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
-public class BattleFrame2 extends JFrame {
+public class BattleFrame extends JFrame {
 
     private JButton btnAttack;
     private JButton btnDefend;
@@ -42,7 +42,7 @@ public class BattleFrame2 extends JFrame {
     private final List<Player> enemyList;
     private int currentEnemyIndex = 0;
     
-    public BattleFrame2(Human human, List<Player> enemyList, Game game, int currentLocation, int totalLocations) {
+    public BattleFrame(Human human, List<Player> enemyList, Game game, int currentLocation, int totalLocations) {
         super("Битва");
         this.human = human;
         human.setHealth(human.getMaxHealth());

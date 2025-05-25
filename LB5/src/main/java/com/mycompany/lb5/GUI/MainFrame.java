@@ -72,7 +72,7 @@ public class MainFrame extends JFrame {
     
     private void startFirstLocation(Human human, int currentLocation) {
         List<Player> enemies = game.generateEnemiesForLocation(human.getLevel());
-        BattleFrame2 battleFrame = new BattleFrame2(human, enemies, game, currentLocation, selectedLocations);
+        BattleFrame battleFrame = new BattleFrame(human, enemies, game, currentLocation, selectedLocations);
         battleFrame.setVisible(true);
     }
 
