@@ -513,8 +513,12 @@ public class BattleFrame extends JFrame {
         human.setDamage(human.getMaxDamage());
         enemy.setDamage(enemy.getMaxDamage());
         
-        playerIconLabel.setIcon(new ImageIcon(human.getIconSource()));
-        enemyIconLabel.setIcon(new ImageIcon(enemy.getIconSource()));
+        playerIconLabel.setIcon(new ImageIcon(
+            getClass().getResource(human.getIconSource()))
+        );
+        enemyIconLabel.setIcon(new ImageIcon(
+            getClass().getResource(enemy.getIconSource()))
+        );
         
         playerScoreLabel.setText("Очки: " + human.getPoints());
         
